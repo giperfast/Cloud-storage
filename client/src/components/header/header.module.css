@@ -1,0 +1,56 @@
+.header
+{
+    background-color: #ffffff;
+    box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
+    width: 100%;
+}
+
+.container
+{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo
+{
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: 3px;
+}
+
+.buttons
+{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.left_section
+{
+    color: #000000cc;
+    display: flex;
+    align-items: center;
+}
+
+.left_section a
+{
+    padding: 20px;
+    transition: all .1s;
+}
+
+.left_section a:hover
+{
+    color: black;
+    transform: translateY(-3px);
+}
+
+.right_section
+{
+    color: #336fee;
+    display: flex;
+    align-items: center;
+}
