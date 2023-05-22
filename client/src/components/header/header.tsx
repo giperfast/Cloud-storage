@@ -7,9 +7,6 @@ import styles from './header.module.css';
 //const pages = ['Products', 'Pricing', 'Blog'];
 //const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-//const anchorElNav = false;
-//const anchorElUser = false;
-
 function Header() {
 
     const [userMenu, setUserMenu] = useState(false);
@@ -23,11 +20,11 @@ function Header() {
                 <div className={styles.buttons}>
                     <div className={styles.left_section}>
                         <Link href="/">Home</Link>
-                        <Link href="/">Products</Link>
                         <Link href="/">Pricing</Link>
                     </div>
                     <div className={styles.right_section}>
                         <Link href="/login">Login</Link>
+                        <Link href="/register">Register</Link>
                     </div>
                 </div>
             </div>
