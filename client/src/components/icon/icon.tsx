@@ -1,3 +1,4 @@
+'use client'
 import styles from './header.module.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,13 +11,15 @@ function Icon({ic = 'check'}) {
     /*return (
         <FontAwesomeIcon icon={faCheck} className="fas fa-check" style={{ color: "red" }}></FontAwesomeIcon>
     )*/
-    return (
+    /*return (
         <div>
-            <FontAwesomeIcon icon="fa-solid fa-check-square" />
-            Your <FontAwesomeIcon icon="fa-regular fa-coffee" /> is hot!
-        
-            Compliments of the <FontAwesomeIcon icon="fa-sharp fa-solid fa-hat-chef" />!
+            <FontAwesomeIcon icon="fa-check-square" />
         </div>
+    )*/
+    return (
+        <>
+            
+        </>
     )
 }
 

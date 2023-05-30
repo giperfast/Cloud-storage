@@ -20,9 +20,10 @@
     font-size: 24px;
     letter-spacing: 3px;
     padding: 15px;
-    border: 1px solid;
+    border: 1px solid #000000cc;
     border-bottom: 0;
     border-top: 0;
+    color: #000000cc;
 }
 
 .buttons
@@ -52,20 +53,41 @@
     background: #0000000d;
 }
 
-.right_section
+.right_section, .user_card
 {
     display: flex;
     align-items: center;
 }
 
-.right_section a
+.right_section a, .user_card
 {
     color: #336fee;
     padding: 20px;
     transition: all .1s;
 }
 
-.right_section a:hover
+.right_section a:hover, .user_card:hover
 {
     background: #336eee0b;
+}
+
+.user_card
+{
+    position: relative;
+    height: 100%;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.menu
+{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
+    border-radius: 0px 0px 8px 8px;
+    top: 100%;
+    right: 0;
+    min-width: -webkit-fill-available;
 }

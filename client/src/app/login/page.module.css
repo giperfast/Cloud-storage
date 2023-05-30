@@ -1,0 +1,23 @@
+.content
+{
+    width: 100%;
+}
+
+.container
+{
+    margin: 25px 0px;
+    padding: 25px;
+    background: white;
+    box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
+    border-radius: 8px; 
+}
+
+.title
+{
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid #dddfe0;
+    font-weight: 600;
+    font-size: 28px;
+    color: #000000cc;
+}

@@ -1,9 +1,10 @@
+import 'server-only'
 import styles from './file.module.css';
 import Image from 'next/image';
 
 import unknown_icon from '@/public/file-icons/unknown.svg';
 
-function File({}) {
+function File({name, type="unknown"}) {
 
     return (
         <div className={styles.file}>
@@ -12,7 +13,7 @@ function File({}) {
                 <Image src="/file-icons/unknown.svg" width={80} height={80} alt="unknown file"/>
             </div>
 
-            <p className={styles.name}>SEUS PTGIE12.zip</p>  
+            <p className={styles.name}>{name}</p>  
         </div>
     )
 }
