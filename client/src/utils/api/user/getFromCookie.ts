@@ -1,17 +1,17 @@
 import 'server-only'
 import { cookies } from 'next/headers';
-//import { cache } from 'react';
+import { cache } from 'react';
 
-export const getUser = async () => {
+export const getUserFromCookie = cache(async () => {
     
     const cookieStore = cookies();
-    const cloud_session = cookieStore.get('cloud_session')?.value
+    const session = cookieStore.get('cloud_session')?.value
     
-    if (!cloud_session) {
+    if (!session) {
         return null;
     }
     
-    const request = await fetch(`http://localhost:4000/auth?session=${cloud_session}`, {
+    const request = await fetch(`http://localhost:4000/auth?session=${session}`, {
         method: "GET",
         next: { revalidate: 10 }
         //cache: 'no-store'
@@ -24,9 +24,6 @@ export const getUser = async () => {
     }
     
     const user = await request.json();
-    
-    //console.log(user);
-    
 
     return user;
-}
+})

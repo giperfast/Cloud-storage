@@ -1,8 +1,11 @@
 .header
 {
+    position: sticky;
+    top: 0;
     background-color: #ffffff;
     box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
     width: 100%;
+    z-index: 100;
 }
 
 .container
@@ -17,7 +20,7 @@
 .logo
 {
     font-weight: 800;
-    font-size: 24px;
+    font-size: 18px;
     letter-spacing: 3px;
     padding: 15px;
     border: 1px solid #000000cc;
@@ -41,53 +44,32 @@
     align-items: center;
 }
 
-.left_section a
+.left_section > *
 {
     padding: 20px;
     transition: all .1s;
 }
 
-.left_section a:hover
+.left_section > *:hover
 {
     color: black;
     background: #0000000d;
 }
 
-.right_section, .user_card
+.right_section
 {
     display: flex;
     align-items: center;
 }
 
-.right_section a, .user_card
+.right_section > *
 {
     color: #336fee;
     padding: 20px;
     transition: all .1s;
 }
 
-.right_section a:hover, .user_card:hover
+.right_section > *:hover
 {
     background: #336eee0b;
-}
-
-.user_card
-{
-    position: relative;
-    height: 100%;
-    cursor: pointer;
-    padding: 10px;
-}
-
-.menu
-{
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    background: white;
-    box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
-    border-radius: 0px 0px 8px 8px;
-    top: 100%;
-    right: 0;
-    min-width: -webkit-fill-available;
 }

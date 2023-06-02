@@ -10,4 +10,4 @@ function FilesContainer({children}) {
     )
 }
 
-export default FilesContainer;
+export { FilesContainer };

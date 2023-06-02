@@ -1,4 +1,5 @@
 import { destroyCookie } from 'nookies'
+import { result } from '../result/result';
 
 export const userLogout = async (session: string) => {
 
@@ -13,5 +14,5 @@ export const userLogout = async (session: string) => {
 
 	destroyCookie(null, 'cloud_session')
 
-	return true;
+	return result(true);
 }

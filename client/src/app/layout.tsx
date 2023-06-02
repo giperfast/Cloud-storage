@@ -2,13 +2,13 @@ import 'server-only'
 import { Metadata } from 'next'
 import './globals.css'
 
-import { Inter } from 'next/font/google'
-
+//import { Inter } from 'next/font/google'
 
 import { Header } from '@/components/header/header'
 import { Footer } from '@/components/footer/footer'
+import { Icon } from '@/components/icon/icon';
 
-const inter = Inter({ subsets: ['latin'] });
+//const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,13 +22,16 @@ function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body className={inter.className}>
+			<body>
 				<div className="App">
 					<Header/>
 					<main>
 						{children}
 					</main>
 					<Footer/>
+					<div className="background-cloud">
+						<Icon name="cloud"/>
+					</div>
 				</div>
 			</body>
 		</html>

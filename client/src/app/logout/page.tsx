@@ -17,9 +17,10 @@ function Logout() {
 				router.push('/');
 				return;
 			}
+
+			await userLogout(session);
 			router.refresh();
 			router.push('/');
-			await userLogout(session);
 		}
 		go_logout();
 	})

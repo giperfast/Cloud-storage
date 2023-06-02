@@ -1,24 +1,24 @@
 import 'server-only'
 import Image from 'next/image';
 import styles from './page.module.css';
-import {Icon} from '@/components/icon/icon';
-import FilesContainer from '@/components/files-container/FilesContainer';
-import File from '@/components/file/file';
-
-import { getUser } from '@/utils/api/user/get';
+import { FilesContainer } from '@/components/files-container/FilesContainer';
+import { File } from '@/components/file/File';
+import { SidebarButton } from "@/components/sidebar-button/SidebarButton";
+import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
 
 async function Cloud() {
-	const user = await getUser();
+	const user = await getUserFromCookie();
 
   	return (
     <>
 		<div className={styles.sidebar}>
 			<div className={styles.container}>
-				<Icon/>
-				<button className={styles.button + ' ' + styles.active}>All files</button>
-				<button className={styles.button}>Recent</button>
-				<button className={styles.button}>Photo</button>
-				<button className={styles.button}>Recycle</button>
+
+				<SidebarButton active="true" title="All files" icon="file"/>
+				<SidebarButton active="false" title="Recent" icon="file-alt"/>
+				<SidebarButton active="false" title="Photo" icon="file-image"/>
+				<SidebarButton active="false" title="Recycle" icon="trash-alt"/>
+
 				<label htmlFor="file">File progress:</label>
 				<progress id="file" max="100" value="70"> 70% </progress>
 			</div>
@@ -33,6 +33,7 @@ async function Cloud() {
 					<File name="piedpiper.c" type="unknown"/>
 					<File name="game.exe" type="unknown"/>
 					<File name="unknown" type="unknown"/>
+
 				</FilesContainer>
 			</div>
     	</div>

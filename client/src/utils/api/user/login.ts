@@ -1,4 +1,5 @@
 import { setCookie } from 'nookies'
+import { result } from '../result/result';
 
 export interface loginDTO {
 	username: string,
@@ -17,16 +18,19 @@ export const userLogin = async (dto: loginDTO): boolean => {
     });
 
 	if (!response) {
-		return false
+		return result(false, 'Internal server error');
 	}
-	console.log(response);
-	const session = await response.text();
-	console.log(session);
+
+	const json = await response.json();
+
+	if (json?.session === undefined) {
+		return result(false, json.message);
+	}
 	
-	setCookie(null, 'cloud_session', session, {
+	setCookie(null, 'cloud_session', json.session, {
 		maxAge: 7 * 24 * 60 * 60,
 		path: '/',
 	});
 
-	return true;
+	return result(true);
 }

@@ -18,4 +18,4 @@ function File({name, type="unknown"}) {
     )
 }
 
-export default File;
+export { File } 

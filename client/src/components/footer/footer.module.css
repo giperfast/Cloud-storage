@@ -1,0 +1,10 @@
+.footer
+{
+    padding: 50px;
+    
+    background-color: #ffffff;
+    box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
+    width: 100%;
+    z-index: 1;
+    margin-top: 50px;
+}

@@ -3,12 +3,11 @@ import Link from 'next/link';
 import styles from './header.module.css';
 //import { useAppSelector } from '../../redux/hooks';
 //import { selectUser } from '../../redux/slices/user';
-import { getUser } from '../../utils/api/user/get';
-
-import UserCard from './user-card';
+import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
+import UserCard from './UserCard';
 
 async function Header() {
-    const user = await getUser();
+    const user = await getUserFromCookie();
 
     return (
         <header className={styles.header}>
@@ -18,7 +17,6 @@ async function Header() {
                     <div className={styles.left_section}>
                         <Link href="/">Home</Link>
                         <Link href="/">Pricing</Link>
-                        <Link href="/cloud">cloud</Link>
                     </div>
                     <div className={styles.right_section}>
                     {
@@ -27,7 +25,7 @@ async function Header() {
                         :
                         <>
                             <Link href="/login">Login</Link>
-                            <Link href="/">Register</Link>
+                            <Link href="/register">Register</Link>
                         </> 
                     } 
                     </div>

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import styles from './header.module.css';
+import styles from './UserCard.module.css';
+import Image from 'next/image';
 
 interface UserCardDTO {
     username: string,
@@ -13,23 +14,24 @@ function UserCard({ user }:{ user:UserCardDTO }) {
     const [isOpened, setIsOpened] = useState(false);
     
     const clickHandle = (e) => {
-        console.log(e.target.className, styles.user_card);
-        setIsOpened(!isOpened);
-        /*if (e.target.className == styles.user_card) {
-            setIsOpened(true);
+        if (e.target.closest(`div#user_card`)) {
+            return false
         }
-        if (e.target.className !== styles.user_card) {
-            setIsOpened(false);
-        }*/
+
+        setIsOpened(false);
     }
 
-    /*useEffect(() => {
-        document.body.addEventListener('click', clickHandle );
-    })*/
+    useEffect(() => {
+        window.addEventListener( 'mouseup', clickHandle );
+    }, [])
 
     return (
-        <div className={styles.user_card} onClick={clickHandle} id="user_card">
-            Logined as {user.username}
+        <div className={styles.user_card} onClick={() => setIsOpened(!isOpened)} id="user_card">
+            <span className={styles.username} title={user.username}>{user.username}</span>
+            <div className={styles.avatar}>
+                <Image src="/avatar.png" width="30" height="30" alt=""/>
+            </div>
+
             {
                 !isOpened ? '' :
                 <div className={styles.menu}>
