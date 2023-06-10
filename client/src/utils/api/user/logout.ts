@@ -1,7 +1,12 @@
-import { destroyCookie } from 'nookies'
-import { result } from '../result/result';
+'use server'
+import { cookies } from 'next/headers';
+import { result, IResult } from '../result/result';
 
-export const userLogout = async (session: string) => {
+export const userLogout = async (session: string): Promise<IResult> => {
+
+	if (session === undefined) {
+		return result(false);
+	}
 
 	const form = new URLSearchParams();
 	form.append('session', session);
@@ -9,10 +14,16 @@ export const userLogout = async (session: string) => {
 	const user = await fetch('http://localhost:4000/user/logout', {
         method: "POST",
 		body: form,
-       	//cache: 'no-store'
+       	cache: 'no-store'
     });
 
-	destroyCookie(null, 'cloud_session')
+	/*cookies().set({
+		name: 'cloud_session',
+		value: '',
+		expires: 0,
+		path: '/',
+	});*/
+	cookies().set('cloud_session', '')
 
 	return result(true);
 }

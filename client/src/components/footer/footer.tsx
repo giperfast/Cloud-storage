@@ -1,5 +1,5 @@
 import 'server-only'
-import { Link } from 'next';
+import Link from 'next';
 import styles from './footer.module.css';
 
 function Footer() {
@@ -10,4 +10,4 @@ function Footer() {
     )
 }
 
-export {Footer};
+export { Footer };

@@ -1,14 +1,10 @@
+'use server'
 import 'server-only'
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 
-export interface IUser {
-    user_id: number,
-    username: string,
-    avatar: string
-}
 
-export const getUserFromCookie = cache(async ()  => {
+export const getFiles = cache(async ()  => {
     
     const cookieStore = cookies();
     const session = cookieStore.get('cloud_session')?.value
@@ -16,13 +12,14 @@ export const getUserFromCookie = cache(async ()  => {
     if (!session) {
         return null;
     }
-    console.log('getti\'n user');
-    
-    const request = await fetch(`http://localhost:4000/auth?session=${session}`, {
+
+    const request = await fetch('http://localhost:4000/files', {
         method: "GET",
-        //next: { tags: ['user'] }
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `bearer ${session}`,
+        },
         next: { revalidate: 60 },
-        //cache: 'no-store'
     }).catch((error) => {
         console.log(error);
     });
@@ -31,7 +28,7 @@ export const getUserFromCookie = cache(async ()  => {
         return null;
     }
     
-    const user: IUser = await request.json();
+    const files = await request.json();
 
-    return user;
+    return files;
 })

@@ -4,23 +4,24 @@ import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { userRegister } from '@/utils/api/user/register';
 import { userLogin } from '@/utils/api/user/login';
+import { IResult } from '../../utils/api/result/result';
 
 function Register() {
 	const router = useRouter();
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
 		const username: string = e.target.querySelector("#username").value;
 		const password: string = e.target.querySelector("#password").value;
 
-		const registered: boolean = await userRegister({username, password});
+		const registered: IResult = await userRegister({username, password});
 
-		if (!registered) {
+		if (!registered.result) {
 			return false;
 		}
 
-		const logined: boolean = await userLogin({username, password});
+		const logined: IResult = await userLogin({username, password});
 
 		if (logined) {
 			router.refresh();

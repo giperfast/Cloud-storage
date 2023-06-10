@@ -35,7 +35,7 @@ main
   margin: 0 auto;
   flex-grow: 1;
   gap: 20px;
-  z-index: 1;
+  z-index: 5;
 }
 
 .background-cloud svg
@@ -46,4 +46,17 @@ main
   z-index: 0;
   right: 0;
   bottom: 0;
+}
+
+.hidden
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  line-height: 0;
 }

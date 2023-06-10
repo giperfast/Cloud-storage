@@ -6,3 +6,8 @@
     gap: 10px;
     margin-top: 15px;
 }
+
+.fileWrapper
+{
+    position: relative;
+}

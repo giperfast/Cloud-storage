@@ -4,7 +4,7 @@ import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import { useRouter } from 'next/navigation';
 import { userLogout } from '@/utils/api/user/logout';
 
-function Logout() {
+async function Logout() {
 	const router = useRouter();
 
 	useEffect(() => {
@@ -25,7 +25,7 @@ function Logout() {
 		go_logout();
 	})
 
-  	return <></>;
+  	return <>Logouting</>;
 }
 
 export default Logout;

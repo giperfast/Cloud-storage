@@ -1,4 +1,5 @@
-import 'server-only'
+//import 'server-only'
+'use server'
 import Link from 'next/link';
 import styles from './header.module.css';
 //import { useAppSelector } from '../../redux/hooks';

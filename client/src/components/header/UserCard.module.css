@@ -31,6 +31,7 @@
     position: absolute;
     display: flex;
     flex-direction: column;
+    white-space: nowrap;
     background: white;
     box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
     border-radius: 0px 0px 8px 8px;

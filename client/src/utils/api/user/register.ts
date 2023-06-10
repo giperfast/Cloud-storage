@@ -1,12 +1,12 @@
-import { setCookie } from 'nookies'
-import { result } from '../result/result';
+'use server'
+import { result, IResult } from '../result/result';
 
 export interface registerDTO {
 	username: string,
 	password: string
 }
 
-export const userRegister = async (dto: registerDTO): boolean => {
+export const userRegister = async (dto: registerDTO): Promise<IResult> => {
 
 	const form = new URLSearchParams();
 	form.append('username', dto.username);

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { userLogout } from './utils/api/user/logout';
 import { getUserFromSession } from './utils/api/user/getFromSession';
+//import { useRouter } from 'next/navigation';
+import { getUserFromCookie } from './utils/api/user/getFromCookie';
 
 const guestRoutes = [
     '/login',
@@ -12,11 +14,11 @@ const userRoutes = [
     '/cloud',
 ];
 
-export async function middleware(request: NextRequest, response: NextResponse) {
-
-    const session = request.cookies.get('cloud_session')?.value;
+export async function middleware(request: NextRequest) {
+    const session: any = request.cookies.get('cloud_session')?.value;
     const user = await getUserFromSession(session);
-
+    //console.log(user, session);
+    
     for (let i = 0; i < guestRoutes.length; i++) {
         const guestRoute = guestRoutes[i];
         
@@ -36,5 +38,4 @@ export async function middleware(request: NextRequest, response: NextResponse) {
             }
         }
     }
-
 }

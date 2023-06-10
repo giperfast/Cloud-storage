@@ -6,7 +6,7 @@ import './globals.css'
 
 import { Header } from '@/components/header/header'
 import { Footer } from '@/components/footer/footer'
-import { Icon } from '@/components/icon/icon';
+import { Icon } from '@/components/icon/Icon';
 
 //const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +24,7 @@ function RootLayout({
 		<html lang="en">
 			<body>
 				<div className="App">
+					{/* @ts-expect-error Server Component */}
 					<Header/>
 					<main>
 						{children}

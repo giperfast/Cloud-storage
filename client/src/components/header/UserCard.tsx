@@ -13,20 +13,22 @@ interface UserCardDTO {
 function UserCard({ user }:{ user:UserCardDTO }) {
     const [isOpened, setIsOpened] = useState(false);
     
-    const clickHandle = (e) => {
-        if (e.target.closest(`div#user_card`)) {
-            return false
-        }
-
-        setIsOpened(false);
+    const clickHandle = (e: any) => {
+        setIsOpened(!isOpened)
     }
 
     useEffect(() => {
-        window.addEventListener( 'mouseup', clickHandle );
+        window.addEventListener('mouseup', (e: any) => {
+            if (e.target.closest(`.${styles.user_card}`)) {
+                return false
+            }
+    
+            setIsOpened(false);
+        });
     }, [])
 
     return (
-        <div className={styles.user_card} onClick={() => setIsOpened(!isOpened)} id="user_card">
+        <div className={styles.user_card} onClick={clickHandle}>
             <span className={styles.username} title={user.username}>{user.username}</span>
             <div className={styles.avatar}>
                 <Image src="/avatar.png" width="30" height="30" alt=""/>

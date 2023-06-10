@@ -3,21 +3,24 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import { FilesContainer } from '@/components/files-container/FilesContainer';
 import { File } from '@/components/file/File';
-import { SidebarButton } from "@/components/sidebar-button/SidebarButton";
+import { SidebarButton, SidebarUploadFileButton } from "@/components/sidebar-button/SidebarButton";
 import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
+import { getFiles } from '@/utils/api/files/get';
 
 async function Cloud() {
 	const user = await getUserFromCookie();
+	const files = await getFiles();
 
   	return (
     <>
 		<div className={styles.sidebar}>
 			<div className={styles.container}>
 
-				<SidebarButton active="true" title="All files" icon="file"/>
-				<SidebarButton active="false" title="Recent" icon="file-alt"/>
-				<SidebarButton active="false" title="Photo" icon="file-image"/>
-				<SidebarButton active="false" title="Recycle" icon="trash-alt"/>
+				<SidebarUploadFileButton title="Upload file" icon="upload"/>
+				<SidebarButton active={true} title="All files" icon="file"/>
+				<SidebarButton active={false} title="Recent" icon="file-alt"/>
+				<SidebarButton active={false} title="Photo" icon="file-image"/>
+				<SidebarButton active={false} title="Recycle" icon="trash-alt"/>
 
 				<label htmlFor="file">File progress:</label>
 				<progress id="file" max="100" value="70"> 70% </progress>
@@ -28,12 +31,11 @@ async function Cloud() {
 			<div className={styles.container}>
 				<p className={styles.title}>Files</p>
 				<FilesContainer>
-					<File name="movie.mp4" type="unknown"/>
-					<File name="document.txt" type="unknown"/>
-					<File name="piedpiper.c" type="unknown"/>
-					<File name="game.exe" type="unknown"/>
-					<File name="unknown" type="unknown"/>
-
+				{
+					files.map((file) => {
+						return <File data={{id: file.file_id, name: file.name, extension: file.extension}}/>
+					})
+				}
 				</FilesContainer>
 			</div>
     	</div>
@@ -41,5 +43,12 @@ async function Cloud() {
   )
 }
 
+/*
+<File data={{id: 1, name: "movie", extension: ".mp4"}}/>
+<File data={{id: 2, name: "document", extension: ".txt"}}/>
+<File data={{id: 3, name: "piedpiper", extension: ".c"}}/>
+<File data={{id: 4, name: "game", extension: ".exe"}}/>
+<File data={{id: 5, name: "unknown", extension: ""}}/>
+*/
 
 export default Cloud;

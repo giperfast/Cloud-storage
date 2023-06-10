@@ -38,3 +38,8 @@
     border-radius: var(--border-radius);
     opacity: 0;
 }
+
+.selected
+{
+    background-color: #ededed !important;
+}

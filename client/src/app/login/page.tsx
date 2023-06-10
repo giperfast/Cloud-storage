@@ -4,19 +4,20 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { userLogin } from '@/utils/api/user/login';
+import { IResult } from '../../utils/api/result/result';
 
 function Login() {
 	const [error, setError] = useState('');
 	const router = useRouter();
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.ChangeEvent<any>) => {
 		e.preventDefault();
 
 		const username: string = e.target.querySelector("#username").value;
 		const password: string = e.target.querySelector("#password").value;
 
-		const logined: boolean = await userLogin({username, password});
-		console.log(logined);
+		const logined: any = await userLogin({username, password});
+
 		if (logined.result === true) {
 			router.refresh();
 			router.push('/cloud');

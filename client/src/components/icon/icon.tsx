@@ -1,3 +1,4 @@
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '@fortawesome/fontawesome-free'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -7,7 +8,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 
 library.add(far, fas, fab);
 
-function Icon({name = 'check'}) {
+function Icon({name = 'check'}: any) {
     return <FontAwesomeIcon icon={['fas', name]}/>
 }
 
