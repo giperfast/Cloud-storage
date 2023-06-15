@@ -3,9 +3,7 @@ import 'server-only'
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 
-
-export const getFiles = cache(async ()  => {
-    
+export const getFiles = async () => {
     const cookieStore = cookies();
     const session = cookieStore.get('cloud_session')?.value
     
@@ -31,4 +29,4 @@ export const getFiles = cache(async ()  => {
     const files = await request.json();
 
     return files;
-})
+}

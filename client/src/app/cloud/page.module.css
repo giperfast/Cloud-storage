@@ -29,9 +29,12 @@
     color: #000000cc;
 }
 
-.sidebar .container
+.sidebar .wrapper
 {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    position: sticky;
+    top: 80px;
+
 }

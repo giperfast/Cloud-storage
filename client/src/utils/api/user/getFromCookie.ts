@@ -8,7 +8,7 @@ export interface IUser {
     avatar: string
 }
 
-export const getUserFromCookie = cache(async ()  => {
+export const getUserFromCookie = async ()  => {
     
     const cookieStore = cookies();
     const session = cookieStore.get('cloud_session')?.value
@@ -34,4 +34,4 @@ export const getUserFromCookie = cache(async ()  => {
     const user: IUser = await request.json();
 
     return user;
-})
+}

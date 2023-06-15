@@ -21,9 +21,12 @@ a
 
 .App
 {
+  position: absolute;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
+  z-index: 1;
 }
 
 main
@@ -35,7 +38,6 @@ main
   margin: 0 auto;
   flex-grow: 1;
   gap: 20px;
-  z-index: 5;
 }
 
 .background-cloud svg

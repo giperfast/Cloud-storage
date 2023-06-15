@@ -8,9 +8,11 @@
     align-items: center;
     text-align: center;
     width: 100px;
+    height: 150px;
     padding: 15px;
     border-radius: var(--border-radius);
     cursor: pointer;
+    user-select: none;
 }
 
 .file:hover
@@ -21,6 +23,7 @@
 .name
 {
     font-size: 12px;
+    word-break: break-all;
 }
 
 .image_wrapper
@@ -28,7 +31,7 @@
     margin-bottom: 10px;
 }
 
-.file_overlay
+/*.file_overlay
 {
     position: absolute;
     top: 0;
@@ -37,7 +40,7 @@
     height: 100%;
     border-radius: var(--border-radius);
     opacity: 0;
-}
+}*/
 
 .selected
 {

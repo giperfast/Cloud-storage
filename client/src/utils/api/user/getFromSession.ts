@@ -1,6 +1,6 @@
 import { cache } from 'react';
 
-export const getUserFromSession = cache(async (session: string) => {
+export const getUserFromSession = async (session: string) => {
     
     if (!session) {
         return null;
@@ -21,4 +21,4 @@ export const getUserFromSession = cache(async (session: string) => {
     const user = await request.json();
 
     return user;
-})
+}

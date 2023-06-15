@@ -3,7 +3,8 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import { FilesContainer } from '@/components/files-container/FilesContainer';
 import { File } from '@/components/file/File';
-import { SidebarButton, SidebarUploadFileButton } from "@/components/sidebar-button/SidebarButton";
+import { Button } from "@/components/buttons/button/Button";
+import { UploadButton } from "@/components/buttons/upload-button/UploadButton";
 import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
 import { getFiles } from '@/utils/api/files/get';
 
@@ -15,15 +16,16 @@ async function Cloud() {
     <>
 		<div className={styles.sidebar}>
 			<div className={styles.container}>
-
-				<SidebarUploadFileButton title="Upload file" icon="upload"/>
-				<SidebarButton active={true} title="All files" icon="file"/>
-				<SidebarButton active={false} title="Recent" icon="file-alt"/>
-				<SidebarButton active={false} title="Photo" icon="file-image"/>
-				<SidebarButton active={false} title="Recycle" icon="trash-alt"/>
+				<div className={styles.wrapper}>
+				<UploadButton title="Upload file" icon="upload"/>
+				<Button title="All files" icon="file" theme="gray"/>
+				<Button title="Recent" icon="file-alt"/>
+				<Button title="Photo" icon="file-image"/>
+				<Button title="Recycle" icon="trash-alt"/>
 
 				<label htmlFor="file">File progress:</label>
 				<progress id="file" max="100" value="70"> 70% </progress>
+				</div>
 			</div>
 		</div>
 
@@ -33,7 +35,7 @@ async function Cloud() {
 				<FilesContainer>
 				{
 					files.map((file) => {
-						return <File data={{id: file.file_id, name: file.name, extension: file.extension}}/>
+						return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type}}/>
 					})
 				}
 				</FilesContainer>

@@ -30,9 +30,9 @@ function RootLayout({
 						{children}
 					</main>
 					<Footer/>
-					<div className="background-cloud">
-						<Icon name="cloud"/>
-					</div>
+				</div>
+				<div className="background-cloud">
+					<Icon name="cloud"/>
 				</div>
 			</body>
 		</html>

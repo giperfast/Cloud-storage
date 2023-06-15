@@ -1,0 +1,62 @@
+.transparent
+{
+    --color: #000000cc;
+    --background-color: transparent;
+    --icon-color: #505050;
+}
+
+.light
+{
+    --color: #000000cc;
+    --background-color: #FFFFFF;
+    --icon-color: #505050;
+}
+
+.gray
+{
+    --color: #000000cc;
+    --background-color: #3a424b1a;
+    --icon-color: #505050;
+}
+
+.primary
+{
+    --color: #FFFFFF;
+    --background-color: #336fee;
+    --icon-color: #FFFFFF;
+}
+
+.button
+{
+    appearance: none;
+    background: var(--background-color);
+    color: var(--color);
+    border: 0;
+    text-align: left;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 32px;
+    padding: 0 15px;
+    font-family: inherit;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+
+.icon
+{
+    width: 15px;
+    line-height: 0;
+    color: var(--icon-color);
+}
+
+.icon svg
+{
+    width: 100%;
+    height: 100%;
+}

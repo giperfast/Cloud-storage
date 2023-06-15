@@ -4,8 +4,9 @@
     top: 0;
     background-color: #ffffff;
     box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
+    height: 58px;
     width: 100%;
-    z-index: 100;
+    z-index: 10;
 }
 
 .container

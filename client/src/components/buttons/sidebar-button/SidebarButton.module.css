@@ -1,0 +1,39 @@
+.button
+{
+    appearance: none;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 32px;
+    padding: 0 15px;
+    font-family: inherit;
+    color: #000000cc;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.button.active
+{
+    background: #3a424b1a;
+}
+
+
+.icon
+{
+    width: 15px;
+    line-height: 0;
+    color: #505050;
+}
+
+.icon svg
+{
+    width: 100%;
+    height: 100%;
+}

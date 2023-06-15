@@ -1,0 +1,48 @@
+.overlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #FFFFFF;
+    padding: 20px;
+    height: 58px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease, visibility .3s ease;
+    z-index: 10;
+}
+
+.active
+{
+    opacity: 1;
+    visibility: visible;
+}
+
+.container
+{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.title
+{
+    width: 180px;
+}
+
+.buttons
+{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.fileOverlayClose
+{
+    cursor: pointer;
+}

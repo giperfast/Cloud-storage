@@ -47,8 +47,8 @@ export const uploadFiles = async (files: FileList) => {
             'Authorization': `bearer ${session}`,
             //'Content-Type': 'application/json'
         },
-        next: { revalidate: 10 }
-        //cache: 'no-store'
+        //next: { revalidate: 10 }
+        cache: 'no-store'
     }).catch((error) => {
         console.log(error);
     });

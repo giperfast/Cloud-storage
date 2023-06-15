@@ -1,9 +1,11 @@
 'use client'
 import Link from 'next/link';
-import styles from './SidebarButton.module.css';
+import styles from './UploadButton.module.css';
 import { Icon } from '@/components/icon/Icon';
 import { createRef } from "react";
-import { uploadFiles } from '../../utils/api/files/upload';
+import { uploadFiles } from '@/utils/api/files/upload';
+
+import { useRouter } from 'next/navigation';
 
 export interface ISidebarButtonProps {
     active: boolean,
@@ -16,19 +18,9 @@ export interface ISidebarUploadFileButtonProps {
     icon: string,
 }
 
-function SidebarButton({active, title, icon}: ISidebarButtonProps) {
-    const activeClass = active === true ? styles.active : ''
 
-    return (
-        <Link href="/" className={styles.button + ' ' + activeClass}>
-            <span className={styles.icon}><Icon name={icon}/></span>
-            {title}
-        </Link>
-    )
-}
-
-function SidebarUploadFileButton({title, icon}: ISidebarUploadFileButtonProps) {
-    
+function UploadButton({title, icon}: ISidebarUploadFileButtonProps) {
+    const router = useRouter();
     const file_input = createRef<HTMLInputElement>();
 
     const uploadFile = (e: React.MouseEvent) => {
@@ -46,6 +38,7 @@ function SidebarUploadFileButton({title, icon}: ISidebarUploadFileButtonProps) {
         }
         
         await uploadFiles(e.target.files);
+        router.refresh();
     }
 
     return (
@@ -59,4 +52,4 @@ function SidebarUploadFileButton({title, icon}: ISidebarUploadFileButtonProps) {
     )
 }
 
-export { SidebarButton, SidebarUploadFileButton };
+export { UploadButton };
