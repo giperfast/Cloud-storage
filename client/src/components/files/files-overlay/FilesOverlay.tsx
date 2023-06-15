@@ -6,7 +6,7 @@ import { IFileData, IFileProps } from '@/components/file/File';
 import { DownloadButton } from "@/components/buttons/download-button/DownloadButton";
 import { Button } from "@/components/buttons/button/Button";
 import { downloadFiles } from '@/utils/api/files/download';
-import { generateShortName, generateFullName } from '../../utils/files/files';
+import { generateShortName, generateFullName } from '@/utils/files/files';
 import { Icon } from '@/components/icon/Icon';
 
 const FilesOverlay = memo(({files, isActive}: any) => {

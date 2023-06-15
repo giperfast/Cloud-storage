@@ -1,11 +1,5 @@
-//'use server'
-
-//import { cookies } from 'next/headers';
+'use client'
 import { parseCookies } from 'nookies'
-//import 'server-only'
-//import { cookies } from 'next/headers';
-//import { cache } from 'react';
-//import { IFileData } from '../../../components/file/File';
 
 export const uploadFiles = async (files: FileList) => {
     console.log(files.length);
@@ -45,12 +39,9 @@ export const uploadFiles = async (files: FileList) => {
         headers: {
             'Accept': 'application/json',
             'Authorization': `bearer ${session}`,
-            //'Content-Type': 'application/json'
         },
-        //next: { revalidate: 10 }
         cache: 'no-store'
     }).catch((error) => {
         console.log(error);
     });
-
 }

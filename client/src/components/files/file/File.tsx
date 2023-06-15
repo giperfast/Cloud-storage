@@ -1,9 +1,9 @@
 'use client'
-import { useContext, useMemo } from 'react';
+import { useContext, memo } from 'react';
 import styles from './File.module.css';
 import Image from 'next/image';
 import { FilesFunctionsContext } from '@/utils/context/files.context';
-import { generateShortName } from '../../utils/files/files';
+import { generateShortName } from '@/utils/files/files';
 
 export interface IFileData {
     file_id: number,
@@ -17,10 +17,8 @@ export interface IFileProps {
     selected?: boolean
 }
 
-//function File({data, selected = false}: IFileProps) {
-const File = ({data, selected = false}: IFileProps) => {
-    //console.log(data);
-    
+const File = memo(({data, selected = false}: IFileProps) => {
+
     const [addFile, removeFile, removeAllFiles, isSelect]: any = useContext(FilesFunctionsContext);
 
     const clickHandle = (e: any) => {
@@ -49,7 +47,7 @@ const File = ({data, selected = false}: IFileProps) => {
            
         </div>
     )
-}
+})
 
 function getImage(type) {
     let result = ''

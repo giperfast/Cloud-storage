@@ -1,8 +1,9 @@
 import 'server-only'
 import Image from 'next/image';
 import styles from './page.module.css';
-import { FilesContainer } from '@/components/files-container/FilesContainer';
-import { File } from '@/components/file/File';
+import { FilesContainer } from '@/components/files/files-container/FilesContainer';
+import { File } from '@/components/files/file/File';
+import { DragDropArea } from "@/components/files/drag-drop/DragDropArea";
 import { Button } from "@/components/buttons/button/Button";
 import { UploadButton } from "@/components/buttons/upload-button/UploadButton";
 import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
@@ -41,6 +42,7 @@ async function Cloud() {
 				</FilesContainer>
 			</div>
     	</div>
+		<DragDropArea/>
     </>
   )
 }

@@ -18,7 +18,6 @@ export interface ISidebarUploadFileButtonProps {
     icon: string,
 }
 
-
 function UploadButton({title, icon}: ISidebarUploadFileButtonProps) {
     const router = useRouter();
     const file_input = createRef<HTMLInputElement>();
