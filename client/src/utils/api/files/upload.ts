@@ -2,6 +2,7 @@
 import { parseCookies } from 'nookies'
 
 export const uploadFiles = async (files: FileList) => {
+    //const test = useAppSelector(selectUser);
     console.log(files.length);
     if (files.length === 0) {
         return false;
@@ -19,7 +20,6 @@ export const uploadFiles = async (files: FileList) => {
 
         data.append('files[]', file, file.name);
     }
-
     //data.append('files', ...files)
 
     //const cookieStore = cookies();

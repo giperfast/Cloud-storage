@@ -29,6 +29,7 @@
 .image_wrapper
 {
     margin-bottom: 10px;
+    pointer-events: none;
 }
 
 /*.file_overlay

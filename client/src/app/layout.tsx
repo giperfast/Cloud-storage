@@ -7,6 +7,8 @@ import './globals.css'
 import { Header } from '@/components/header/header'
 import { Footer } from '@/components/footer/footer'
 import { Icon } from '@/components/icon/Icon';
+import { ClientProvider } from '@/redux/ClientProvider';
+import { FilesManagerOverlay } from '@/components/files/files-manager-overlay/FilesManagerOverlay'
 
 //const inter = Inter({ subsets: ['latin'] });
 
@@ -23,17 +25,20 @@ function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<div className="App">
-					{/* @ts-expect-error Server Component */}
-					<Header/>
-					<main>
-						{children}
-					</main>
-					<Footer/>
-				</div>
-				<div className="background-cloud">
-					<Icon name="cloud"/>
-				</div>
+				<ClientProvider>
+					<div className="App">
+						{/* @ts-expect-error Server Component */}
+						<Header/>
+						<main>
+							{children}
+						</main>
+						<Footer/>
+						<FilesManagerOverlay/>
+					</div>
+					<div className="background-cloud">
+						<Icon name="cloud"/>
+					</div>
+				</ClientProvider>
 			</body>
 		</html>
   	)

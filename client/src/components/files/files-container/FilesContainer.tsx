@@ -4,10 +4,16 @@ import styles from './FilesContainer.module.css';
 import { FilesFunctionsContext } from '@/utils/context/files.context';
 import { IFileData, IFileProps } from '../file/File';
 import { FilesOverlay } from "../files-overlay/FilesOverlay";
+import { useAppSelector } from '@/redux/hooks';
+import { selectFiles } from '@/redux/slices/uploadFiles';
 
 function FilesContainer({children}: any) {
     const [files, setFiles] = useState<Array<IFileData>>([]);
 
+    //const files_upload = useAppSelector(selectFiles)
+
+    //console.log(files_upload);
+    
     console.log(files);
     
     const addFile = (file: IFileData): void => {

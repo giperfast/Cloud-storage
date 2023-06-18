@@ -105,6 +105,7 @@ export class FilesService {
 	}
 
 	getType(file): string {
-		return file.mimetype.split('/')[0] ?? null;
+		return file.mimetype;
+		//return file.mimetype.split('/')[0] ?? null;
 	}
 }

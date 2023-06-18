@@ -1,3 +1,4 @@
+'use client'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type User = {

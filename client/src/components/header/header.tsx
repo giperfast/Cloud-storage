@@ -2,8 +2,6 @@
 'use server'
 import Link from 'next/link';
 import styles from './header.module.css';
-//import { useAppSelector } from '../../redux/hooks';
-//import { selectUser } from '../../redux/slices/user';
 import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
 import UserCard from './UserCard';
 

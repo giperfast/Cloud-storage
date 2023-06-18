@@ -1,0 +1,75 @@
+.container
+{
+    position: fixed;
+    overflow: visible;
+    bottom: 0;
+    right: 36px;
+    width: 460px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+    background-color: #FFFFFF;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    overflow: hidden;
+}
+
+.header
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
+    background: #336fee;
+    color: white;
+    cursor: pointer;
+}
+
+.wrapper
+{
+    overflow-y: auto;
+    /*min-height: 300px;*/
+    max-height: 400px;
+    transition: max-height .2s, min-height .2s;
+}
+
+.minimal
+{
+    max-height: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.file
+{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+/*.file:last-child
+{
+    margin-bottom: 15px;
+}*/
+
+.file:hover
+{
+    background: #00000008;
+}
+
+.progressbar
+{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.progressbar span
+{
+    font-size: 12px;
+}
+
+.file progress::-moz-progress-bar { background: #e91717  !important; }
+.file progress::-webkit-progress-value { background: #e91717  !important; }
+.file progress { color: #e91717  !important; }

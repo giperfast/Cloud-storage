@@ -2,11 +2,12 @@
 import { useState, useEffect, memo } from 'react';
 import styles from './DragDropArea.module.css';
 import Image from 'next/image';
-import { uploadFiles } from '@/utils/api/files/upload';
 import { useRouter } from 'next/navigation';
-
+import { uploadFile } from '@/redux/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 const DragDropArea = () => {
     const router = useRouter();
+    const dispatch = useAppDispatch();
     const [drag, setDrag] = useState(false);
 
     useEffect(() => {
@@ -33,12 +34,28 @@ const DragDropArea = () => {
 
         const dropHandler = async (e) => {
             e.preventDefault();
-            console.log(e);
-            console.log(e.dataTransfer.files);
             setDrag(false);
             counter = 0;
-            await uploadFiles(e.dataTransfer.files);
-            router.refresh();
+
+            const files = e.dataTransfer.files;
+
+            if (!files) {
+                return false;
+            }
+            
+            for (let i = 0; i < files.length; i++) {
+                const file: File | null = files[i];
+                dispatch(uploadFile(file)).then(() => {
+                    router.refresh();
+                });
+            }
+
+            /*if (!e.dataTransfer.files) {
+                return false;
+            }
+
+            await dispatch(uploadFiles(e.dataTransfer.files))
+            router.refresh();*/
         }
 
         window.addEventListener('dragenter', dragStartHandler)
@@ -48,14 +65,15 @@ const DragDropArea = () => {
     }, [])
 
 
-    return (
-        <div className={styles.container}>
-        {
-            drag ? <div className={styles.content}>Drop file</div>
-            : ''
-        }
-        </div>
-    )
+    if (drag === true) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.content}>Drop file</div>
+            </div>
+        )
+    }
+
+    return <></>;
 }
 
 export { DragDropArea } 

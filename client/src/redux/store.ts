@@ -1,21 +1,18 @@
+'use client'
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 
 import { UserReduser } from './slices/user';
+import { UploadFilesReduser } from './slices/uploadFiles';
+import { DownloadFilesReduser } from './slices/downloadFiles';
 
-export function makeStore() {
-  return configureStore({
-    reducer: {
-        user: UserReduser,
-    },
-  })
-}
-
-const store = makeStore()
+export const store = configureStore({
+	reducer: {
+		user: UserReduser,
+		uploadfiles: UploadFilesReduser,
+		downloadfiles: DownloadFilesReduser
+	},
+});
 
 export type AppState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch
-
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action<string>>
-
-export default store

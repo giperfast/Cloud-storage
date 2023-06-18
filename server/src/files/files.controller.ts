@@ -16,10 +16,10 @@ export class FilesController {
 	constructor(private readonly filesService: FilesService, private readonly authService: AuthService) {}
 
 	@Post('/upload')
-	@UseInterceptors(FilesInterceptor('files[]'))
+	@UseInterceptors(FilesInterceptor('file'))
   	async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>, @Req() request: Request): Promise<any> {
 		const user = await this.authService.fromBaerer(request);
-
+		let result = [];
 		for (const file of files) {
 			console.log(file);
 			
@@ -32,13 +32,19 @@ export class FilesController {
 					console.log(path, file.originalname);
 				});
 			})
+
+			result.push({
+				file_id: hash,
+				name: file.originalname
+			});
 		}
+
+		return result;
   	}
 
 	@Get('/')
 	async getFiles(@Req() request: Request): Promise<any> {
 		const user = await this.authService.fromBaerer(request);
-  
 		const files = this.filesService.getFiles(user.id);
 		return files;
 	}
@@ -48,16 +54,28 @@ export class FilesController {
 		const user = await this.authService.fromBaerer(request);
 		console.log(query);
 
-		if (!Array.isArray(query['files'])) {
+		const file_hash = query['file'];
+		console.log(file_hash);
+		const file = await this.filesService.getFileFromId(file_hash)
+		const path = this.filesService.getUrl(user.id, file['file_id'])
+		const compressed_buffer = readFileSync(path);
+		unzip(compressed_buffer, function (_, result_buffer) {
+			response.setHeader('Content-Length', file['size'])
+			response.send(result_buffer);
+		})
+
+		return true;
+		/*if (!Array.isArray(query['files'])) {
 			const file_hash = query['files'];
 			const file = await this.filesService.getFileFromId(file_hash)
 			const path = this.filesService.getUrl(user.id, file['file_id'])
 			const compressed_buffer = readFileSync(path);
 			unzip(compressed_buffer, function (_, result_buffer) {
+				response.setHeader('Content-Length', file['size'])
 				response.send(result_buffer);
 			})
 			return true;
-		}
+		}*/
 		
 		/*var archive = archiver('zip', {
 			gzip: false,

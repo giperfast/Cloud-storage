@@ -2,6 +2,7 @@
 import 'server-only'
 import { cookies } from 'next/headers';
 import { cache } from 'react';
+import { parseCookies } from 'nookies'
 
 export const getFiles = async () => {
     const cookieStore = cookies();
@@ -17,7 +18,7 @@ export const getFiles = async () => {
             'Accept': 'application/json',
             'Authorization': `bearer ${session}`,
         },
-        next: { revalidate: 60 },
+        next: { tags: ['files'] },
     }).catch((error) => {
         console.log(error);
     });
@@ -27,6 +28,6 @@ export const getFiles = async () => {
     }
     
     const files = await request.json();
-
+    
     return files;
 }

@@ -3,9 +3,9 @@ import Link from 'next/link';
 import styles from './UploadButton.module.css';
 import { Icon } from '@/components/icon/Icon';
 import { createRef } from "react";
-import { uploadFiles } from '@/utils/api/files/upload';
-
 import { useRouter } from 'next/navigation';
+import { uploadFile } from '@/redux/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 export interface ISidebarButtonProps {
     active: boolean,
@@ -21,8 +21,9 @@ export interface ISidebarUploadFileButtonProps {
 function UploadButton({title, icon}: ISidebarUploadFileButtonProps) {
     const router = useRouter();
     const file_input = createRef<HTMLInputElement>();
+    const dispatch = useAppDispatch();
 
-    const uploadFile = (e: React.MouseEvent) => {
+    const uploadFiles = (e: React.MouseEvent) => {
         const input_element: any = file_input.current;
         input_element.click();
         input_element.value = '';
@@ -30,20 +31,24 @@ function UploadButton({title, icon}: ISidebarUploadFileButtonProps) {
     }
 
     const sendFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e);
+        const files = e.target.files;
 
-        if (!e.target.files) {
+        if (!files) {
             return false;
         }
-        
-        await uploadFiles(e.target.files);
-        router.refresh();
+
+        for (let i = 0; i < files.length; i++) {
+            const file: File | null = files[i];
+            dispatch(uploadFile(file)).then(() => {
+                router.refresh();
+            });
+        }
     }
 
     return (
         <>
             <input type="file" className="hidden" ref={file_input} onChange={sendFile} multiple={true}/>
-            <button onClick={uploadFile} className={styles.button + ' ' + styles.upload}>
+            <button onClick={uploadFiles} className={styles.button + ' ' + styles.upload}>
                 <span className={styles.icon}><Icon name={icon}/></span>
                 {title}
             </button >
