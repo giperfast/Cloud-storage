@@ -1,6 +1,9 @@
 .content
 {
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .container
@@ -10,6 +13,7 @@
     background: white;
     box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
     border-radius: 8px; 
+    width: 400px;
 }
 
 .title
@@ -20,4 +24,54 @@
     font-weight: 600;
     font-size: 28px;
     color: #000000cc;
+}
+
+.form
+{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.input
+{
+    appearance: none;
+    border-radius: 8px;
+    padding: 10px;
+    border: 2px solid #dddfe0;
+    font-size: 14px;
+}
+
+.label
+{
+    margin: 10px 0px 10px 0px;
+}
+
+.button
+{
+    appearance: none;
+    border: 2px solid aliceblue;
+    padding: 10px;
+    background: #336eee0b;
+    margin-top: 20px;
+    border-radius: 8px;
+    color: #336fee;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .3s background;
+}
+
+.button:hover
+{
+    background: #336eee17;
+}
+
+.error
+{
+    border: 2px solid #ff000061;
+    padding: 10px;
+    background: #ff00001c;
+    margin-top: 20px;
+    border-radius: 8px;
 }

@@ -4,13 +4,12 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios';
 import { parseCookies } from 'nookies'
 
-export const downloadFile = createAsyncThunk('downloadFiles/download', async function(file, {dispatch, getState}) {
+export const downloadFile = createAsyncThunk('downloadFiles/download', async function(files, {dispatch, getState}) {
     
-    if (file === null) {
+    if (files === null) {
         return false;
     }
-    console.log(file);
-    
+
     const cookies = parseCookies()
     const session = cookies['cloud_session']
     
@@ -19,14 +18,28 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
     }
     
     const state = getState();
-    console.log(state.downloadfiles.files);
     const stateFiles = selectDownloadFiles(state);
     
-    const file_id = file['file_id'];
-    dispatch(setFiles([...stateFiles, {file_id: file_id, name: file['name'], progress: 0}]));
+    const id = stateFiles.length !== 0 ? stateFiles.at(-1).id + 1 : 0 ;
+    //dispatch(setFiles([...stateFiles, {id: id, file_id: files['file_id'], name: files['name'], extension: files['extension'], progress: 0}]));
+
+    if (files.length > 1) {
+        dispatch(setFiles([...stateFiles, {id: id, file_id: '', name: 'files', extension: 'zip', progress: 0}]));
+    } else {
+        dispatch(setFiles([...stateFiles, {id: id, file_id: files[0]['file_id'], name: files[0]['name'], extension: files[0]['extension'], progress: 0}]));
+    }
+
+   
 
     let query = new URLSearchParams();
-    query.append('file', file_id);
+    //query.append('file', file['file_id']);
+
+    for (const file of files) {
+        query.append('file', file.file_id);
+    }
+
+    let lastNow = Date.now();
+    let lastKBytes = 0;
 
     const result = await axios.get(`http://localhost:4000/files/download?${query}`, {
         responseType: 'arraybuffer',
@@ -35,9 +48,20 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
             'Authorization': `bearer ${session}`
         },
         onDownloadProgress: download => {
-            let progress = Math.round((100 * download.loaded) / download.total);    
-            console.log(progress);            
-            dispatch(setDownloadProgress({file_id, progress}));
+            console.log(download);
+            
+            const now = Date.now();
+            const bytes = download.loaded;
+            const kbytes = bytes / 1024;
+            const uploadedkBytes = kbytes - lastKBytes;
+            const elapsed = (now - lastNow) / 1000;
+            const kbps =  elapsed ? uploadedkBytes / elapsed : 0 ;
+            lastKBytes = kbytes;
+            lastNow = now;
+            console.log(kbps.toFixed(2) + "KB/s");
+
+            let progress = Math.round((100 * download.loaded) / download.total);
+            dispatch(setDownloadProgress({id, progress}));
         },
     });
 
@@ -48,7 +72,18 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
     const file_url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = file_url;
-    link.download = generateFullName(file['name'], file['extension']);
+
+    if (files.length > 1) {
+        link.download = generateFullName('files', 'zip');
+    } else {
+        link.download = generateFullName(files[0]['name'], files[0]['extension']);
+    }
+
+    //link.download = generateFullName(file['name'], file['extension']);
+    /*let filename = result.headers['content-disposition']
+    console.log(filename);*/
+    
+    //link.download = generateFullName('files', 'zip');
     document.body.appendChild(link);
     link.click();
     link.parentNode?.removeChild(link);
@@ -64,18 +99,15 @@ export const downloadFilesSlice = createSlice({
             state.files = action.payload;
         },
         setDownloadProgress: (state, action: PayloadAction<any>) => {
-            const file_id = action.payload.file_id;
-            
-            console.log(file_id);
+            const id = action.payload.id;
 
             const file = state.files.filter((file) => {
-                return file.file_id === file_id
+                return file.id === id
             })[0]
 
             if (file === undefined) {
                 return state
             }
-            console.log(file, action.payload.progress);
             
             file.progress = action.payload.progress;
         },

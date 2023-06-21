@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { uploadFile } from '@/redux/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-const DragDropArea = () => {
+
+const DragDropArea = ({isActive}) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [drag, setDrag] = useState(false);
@@ -37,6 +38,10 @@ const DragDropArea = () => {
             setDrag(false);
             counter = 0;
 
+            if (isActive === false) {
+                return false;
+            }
+
             const files = e.dataTransfer.files;
 
             if (!files) {
@@ -49,13 +54,6 @@ const DragDropArea = () => {
                     router.refresh();
                 });
             }
-
-            /*if (!e.dataTransfer.files) {
-                return false;
-            }
-
-            await dispatch(uploadFiles(e.dataTransfer.files))
-            router.refresh();*/
         }
 
         window.addEventListener('dragenter', dragStartHandler)
@@ -65,15 +63,17 @@ const DragDropArea = () => {
     }, [])
 
 
-    if (drag === true) {
-        return (
-            <div className={styles.container}>
-                <div className={styles.content}>Drop file</div>
-            </div>
-        )
+    if (drag === false) {
+        return <></>;
     }
 
-    return <></>;
+    const message = isActive === true ? 'Drop file' : 'Storage is full. Please free up space to upload files'
+
+    return (
+        <div className={styles.container}>
+            <div className={styles.content}>{message}</div>
+        </div>
+    )
 }
 
 export { DragDropArea } 

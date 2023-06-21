@@ -13,10 +13,9 @@ export class FilesService {
   	constructor(private readonly databaseService: DatabaseService) {}
 
 	async createFile(file_data, userId): Promise<string> {
-		const file_id = randomBytes(32).toString('hex');
 		const file = await this.databaseService.file.create({
 			data: {
-				file_id: file_id,
+				file_id: randomBytes(32).toString('hex'),
 				name: this.getName(file_data),
 				extension: this.getExtension(file_data),
 				size: this.getSize(file_data),
@@ -36,6 +35,18 @@ export class FilesService {
 		})
 
 		return files;
+	}
+
+	async getFilesTotalSize(userId): Promise<number> {
+		const files = await this.getFiles(userId);
+
+		let size = 0;
+		for (let index = 0; index < Object.keys(files).length; index++) {
+			const file = files[index];
+			size += file['size']
+		}
+
+		return size;
 	}
 
 	async getFileFromId(file_id): Promise<object> {
@@ -105,7 +116,7 @@ export class FilesService {
 	}
 
 	getType(file): string {
-		return file.mimetype;
+		return file.mimetype ?? null;
 		//return file.mimetype.split('/')[0] ?? null;
 	}
 }

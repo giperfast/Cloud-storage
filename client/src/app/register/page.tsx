@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react';
 import Image from 'next/image';
 import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
@@ -8,6 +9,7 @@ import { IResult } from '../../utils/api/result/result';
 
 function Register() {
 	const router = useRouter();
+	const [error, setError] = useState('');
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -34,10 +36,18 @@ function Register() {
 			<div className={styles.content}>
 				<div className={styles.container}>
 					<p className={styles.title}>Register</p>
-					<form onSubmit={handleSubmit}>
-						<input type="text" id="username" name="username" autoComplete="username"/>
-						<input type="password" id="password" name="password" autoComplete="current-password"/>
-						<button type="submit">REGISTER</button>
+					<form onSubmit={handleSubmit} className={styles.form}>
+
+						<label htmlFor="username" className={styles.label}>Username</label>
+						<input type="text" id="username" name="username" autoComplete="username" className={styles.input}/>
+
+						<label htmlFor="password" className={styles.label}>Password</label>
+						<input type="password" id="password" name="password" autoComplete="current-password" className={styles.input}/>
+
+						{
+							error ? <div className={styles.error}>{error}</div> : ''
+						}
+						<button type="submit" className={styles.button}>REGISTER</button>
 					</form>
 				</div>
 			</div>

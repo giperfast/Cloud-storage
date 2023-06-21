@@ -19,8 +19,9 @@ export const uploadFile = createAsyncThunk('uploadFiles/upload', async function(
     const state = getState();
     const stateFiles = selectUploadFiles(state);
 
-    const file_id = stateFiles.length;
-    dispatch(setFiles([...stateFiles, {file_id: file_id, name: file.name, progress: 0}]));
+    //const file_id = stateFiles.length;
+    const id = stateFiles.length !== 0 ? stateFiles.at(-1).id + 1 : 0 ;
+    dispatch(setFiles([...stateFiles, {id: id, name: file.name, extension: file['extension'], progress: 0}]));
 
     let data = new FormData();
     data.append('file', file, file.name);
@@ -32,7 +33,7 @@ export const uploadFile = createAsyncThunk('uploadFiles/upload', async function(
         },
         onUploadProgress: upload => {
             let progress = Math.round((100 * upload.loaded) / upload.total);                        
-            dispatch(setUploadProgress({file_id, progress}));
+            dispatch(setUploadProgress({id, progress}));
         },
     });
 });
@@ -47,12 +48,17 @@ export const uploadFilesSlice = createSlice({
             state.files = action.payload;
         },
         setUploadProgress: (state, action: PayloadAction<any>) => {
-            const file_id = action.payload.file_id;
-            if (state.files[file_id] === undefined) {
+            const id = action.payload.id;
+
+            const file = state.files.filter((file) => {
+                return file.id === id
+            })[0]
+
+            if (file === undefined) {
                 return state
             }
-
-            state.files[file_id].progress = action.payload.progress;
+            
+            file.progress = action.payload.progress;
         },
         removeUploadFiles: (state, action: PayloadAction<any>) => {
             state.files = [];

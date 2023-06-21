@@ -1,36 +1,34 @@
 'use client'
-import Link from 'next/link';
 import styles from './UploadButton.module.css';
-import { Icon } from '@/components/icon/Icon';
 import { createRef } from "react";
 import { useRouter } from 'next/navigation';
 import { uploadFile } from '@/redux/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
-export interface ISidebarButtonProps {
-    active: boolean,
-    title: string,
-    icon: string,
-}
-
 export interface ISidebarUploadFileButtonProps {
-    title: string,
-    icon: string,
+    children: any,
+    isActive: boolean,
 }
 
-function UploadButton({title, icon}: ISidebarUploadFileButtonProps) {
+function UploadButton({children, isActive}: ISidebarUploadFileButtonProps) {
     const router = useRouter();
     const file_input = createRef<HTMLInputElement>();
     const dispatch = useAppDispatch();
 
     const uploadFiles = (e: React.MouseEvent) => {
+        if (isActive === false) {
+            return false;
+        }
+
         const input_element: any = file_input.current;
         input_element.click();
         input_element.value = '';
-        //document.getElementById('inputFile').click();
     }
 
     const sendFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isActive === false) {
+            return false;
+        }
         const files = e.target.files;
 
         if (!files) {
@@ -46,13 +44,10 @@ function UploadButton({title, icon}: ISidebarUploadFileButtonProps) {
     }
 
     return (
-        <>
+        <span onClick={uploadFiles} className={styles.upload}>
             <input type="file" className="hidden" ref={file_input} onChange={sendFile} multiple={true}/>
-            <button onClick={uploadFiles} className={styles.button + ' ' + styles.upload}>
-                <span className={styles.icon}><Icon name={icon}/></span>
-                {title}
-            </button >
-        </>
+            {children}
+        </span >
     )
 }
 

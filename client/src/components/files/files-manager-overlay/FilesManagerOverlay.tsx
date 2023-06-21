@@ -32,11 +32,11 @@ function FilesManager({files, title, clearFn}) {
             {
                 files.map((file) => {
                     return (
-                        <div className={styles.file} key={file.file_id}>
-                            <label htmlFor={`file_${file.file_id}`} title={file.name}>{generateShortName(file.name, '')}</label>
+                        <div className={styles.file} key={file.id}>
+                            <label htmlFor={`file_${file.id}`} title={file.name}>{generateShortName(file.name, file.extension)}</label>
                             <div className={styles.progressbar}>
-                                <span>{file.progress}%</span>
-                                <progress id={`file_${file.file_id}`} max="100" value={file.progress} >{file.progress}%</progress>
+                                <span>{file.progress !== 0 ? file.progress + '%' : 'Processing'}</span>
+                                <progress id={`file_${file.id}`} max="100" value={file.progress} >{file.progress}%</progress>
                             </div>
                         </div>
                     ) 

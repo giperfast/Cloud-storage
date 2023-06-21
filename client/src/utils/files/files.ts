@@ -1,6 +1,6 @@
 'use client'
 
-export function generateFullName(name, extension) {
+export function generateFullName(name: string, extension: string|null = null) {
     if (extension === null) {
         return name;
     }
@@ -8,7 +8,7 @@ export function generateFullName(name, extension) {
     return `${name}.${extension}`;
 }
 
-export function generateShortName(name, extension) {
+export function generateShortName(name: string, extension: string|null = null) {
     const MAX_LENGTH = 12;
     
     if (name.length <= MAX_LENGTH) {

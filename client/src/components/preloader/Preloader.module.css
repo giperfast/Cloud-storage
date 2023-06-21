@@ -1,0 +1,32 @@
+.preloader
+{
+    display: flex;
+}
+
+.bounce
+{
+    animation: bouncedelay 1.4s ease-in-out infinite both;
+    background-color: black;
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+}
+
+.bounceFirst
+{
+    animation-delay: -.32s;
+}
+
+.bounceSecond
+{
+    animation-delay: -.16s;
+}
+
+@keyframes bouncedelay {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}

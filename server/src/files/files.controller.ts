@@ -5,11 +5,11 @@ import { FilesService } from './files.service';
 import { AuthService } from '../auth/auth.service';
 
 import { writeFile, readFileSync, createWriteStream } from 'fs';
-import { gzip, unzip } from 'zlib';
+import { gzip, unzip, unzipSync } from 'zlib';
 import { Buffer } from "buffer";
 import { Writable } from 'stream'
 const archiver = require('archiver');
-
+var Stream = require('stream');
 
 @Controller('files')
 export class FilesController {
@@ -52,79 +52,50 @@ export class FilesController {
 	@Get('/download')
 	async downloadFiles(@Req() request: Request, @Res() response: Response, @Query() query: Array<string>): Promise<any> {
 		const user = await this.authService.fromBaerer(request);
-		console.log(query);
 
-		const file_hash = query['file'];
-		console.log(file_hash);
-		const file = await this.filesService.getFileFromId(file_hash)
-		const path = this.filesService.getUrl(user.id, file['file_id'])
-		const compressed_buffer = readFileSync(path);
-		unzip(compressed_buffer, function (_, result_buffer) {
-			response.setHeader('Content-Length', file['size'])
-			response.send(result_buffer);
-		})
-
-		return true;
-		/*if (!Array.isArray(query['files'])) {
-			const file_hash = query['files'];
+		if (!Array.isArray(query['file'])) {
+			const file_hash = query['file'];
 			const file = await this.filesService.getFileFromId(file_hash)
 			const path = this.filesService.getUrl(user.id, file['file_id'])
 			const compressed_buffer = readFileSync(path);
-			unzip(compressed_buffer, function (_, result_buffer) {
-				response.setHeader('Content-Length', file['size'])
-				response.send(result_buffer);
-			})
-			return true;
-		}*/
+			const uncompressed_buffer = unzipSync(compressed_buffer);
+			//response.attachment('test.zip');
+			return response.send(uncompressed_buffer);
+		}
+
 		
-		/*var archive = archiver('zip', {
-			gzip: false,
-			zlib: { level: 9 } // Sets the compression level.
-		});
-
-		const buffs = []
-		//var output = createWriteStream('./example.zip');
+		let archive = archiver('zip');
 		const converter = new Writable()
+		const buffs = [];
+		
+		response.attachment('files.zip');
 
-    	converter._write = (chunk, encoding, cb) => {
+		converter._write = (chunk, encoding, cb) => {
 			buffs.push(chunk)
 			process.nextTick(cb)
 		}
+	  
+		converter.on('finish', () => {
+			
+			/*response.write('test');
+			response.write(Buffer.concat(buffs));
+			return response.end();*/
 
-		archive.pipe(converter);*/
+			//response.write("bar");
+			return response.send(Buffer.concat(buffs));
+		})
+
+		archive.pipe(converter)
 		
-		/*for (const file_hash of query['files']) {
+		//response.send('unzipping')
+		for (const file_hash of query['file']) {
 			const file_data = await this.filesService.getFileFromId(file_hash)
 			const path = this.filesService.getUrl(user.id, file_hash)
 			const compressed_buffer = readFileSync(path);
-			unzip(compressed_buffer, function (_, result_buffer) {
-				archive.append(result_buffer, { name: `${file_data['name']}.${file_data['extension']}` });
-			})
-			
+			const uncompressed_buffer = unzipSync(compressed_buffer);
+			archive.append(uncompressed_buffer, {name: `${file_data['name']}.${file_data['extension']}` });
 		}
-
+		
 		archive.finalize();
-		const bytes = Buffer.concat(buffs)
-		console.log(bytes);*/
-		response.send(this.filesService.zipFiles([
-		{
-			data: Buffer.from('just a buf'),
-			name: 'file.txt'
-		}
-		]));
-		
-		//unzip(multiple_buffer, function (_, result_buffer) {
-		//	response.send(result_buffer);
-		//})
-		
-	
-		
 	}
-	
-	/*@Post('/single-upload')
-	@UseInterceptors(FilesInterceptor('file'))
-	async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<any> {
-		console.log(file);
-	}*/
-
 }

@@ -1,42 +1,18 @@
 'use client'
-import { createContext, useState, Children, useEffect, isValidElement, cloneElement, useCallback } from 'react';
+import { Children, useEffect, isValidElement, cloneElement, useCallback } from 'react';
 import styles from './FilesContainer.module.css';
-import { FilesFunctionsContext } from '@/utils/context/files.context';
-import { IFileData, IFileProps } from '../file/File';
-import { FilesOverlay } from "../files-overlay/FilesOverlay";
-import { useAppSelector } from '@/redux/hooks';
-import { selectFiles } from '@/redux/slices/uploadFiles';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { removeFiles, selectContextFile, selectFiles } from '@/redux/slices/files';
 
 function FilesContainer({children}: any) {
-    const [files, setFiles] = useState<Array<IFileData>>([]);
-
-    //const files_upload = useAppSelector(selectFiles)
-
-    //console.log(files_upload);
-    
-    console.log(files);
-    
-    const addFile = (file: IFileData): void => {
-        setFiles(files => [...files, file])
-    }
-
-    const removeFile = (file_id: string): void => {
-        setFiles(files.filter((file) => file.file_id != file_id));
-    }
-
-    const removeAllFiles = (): void => {
-        setFiles([]);
-    }
+    const files = useAppSelector(selectFiles);
+    const dispatch = useAppDispatch();
 
     const isSelect = (file_id: string): boolean => {
         return files.findIndex((file) => file.file_id == file_id) !== -1;
     }
     
     const windowClickHandler = useCallback((e: any) => {
-        if (e.which !== 1) {
-            return false;
-        }
-
         if (e.ctrlKey) {
             return false;
         }
@@ -45,15 +21,19 @@ function FilesContainer({children}: any) {
             return false
         }
 
-        if (e.target.closest(`.${styles.fileWrapper}`)) {
+        if (e.target.closest(`.fileWrapper`)) {
+            return false
+        }
+
+        if (e.target.closest(`#context_menu`)) {
             return false
         }
 
         if (files.length === 0) {
             return
         }
-        
-        removeAllFiles();
+
+        dispatch(removeFiles());
     }, [files]);
 
     useEffect(() => {
@@ -66,7 +46,7 @@ function FilesContainer({children}: any) {
     const newChildren = Children.map(children, child => {
         if (isValidElement(child)) {
             const props: any = child.props;
-            const file_id: number = props.data?.file_id;
+            const file_id: string = props.data?.file_id;
             return cloneElement(child as React.ReactElement<any>, { selected: isSelect(file_id) });
         }
         return child;
@@ -74,14 +54,11 @@ function FilesContainer({children}: any) {
 
     return (
         <div className={styles.files}>
-            <FilesFunctionsContext.Provider value={ [addFile, removeFile, removeAllFiles, isSelect] }>
-            {
-                Children.map(newChildren, child =>
-                    <div className={styles.fileWrapper}>{child}</div>
-                )
-            }
-            </FilesFunctionsContext.Provider>
-            <FilesOverlay files={files} isActive={files.length !== 0}/>
+        {
+            Children.map(newChildren, child =>
+                <div className="fileWrapper">{child}</div>
+            )
+        }
         </div>
     )
 }

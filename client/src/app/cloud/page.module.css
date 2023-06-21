@@ -38,3 +38,22 @@
     top: 80px;
 
 }
+
+.capacity
+{
+    margin-top: 15px;
+    background-color: #3a424b1a;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.capacity label
+{
+    font-size: 16px;
+}
+
+.capacity progress
+{
+    width: 100%;
+}

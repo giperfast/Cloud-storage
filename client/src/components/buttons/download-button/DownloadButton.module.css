@@ -1,5 +1,9 @@
+.download > *
+{
+    width: 100%;
+}
 
-.button
+/*.button
 {
     appearance: none;
     background: transparent;
@@ -43,4 +47,4 @@
 .button.upload .icon
 {
     color: #FFFFFF;
-}
+}*/

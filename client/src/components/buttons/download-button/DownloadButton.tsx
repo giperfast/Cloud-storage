@@ -8,22 +8,23 @@ import { downloadFile } from '@/redux/slices/downloadFiles';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 
-function DownloadButton({title, icon, files}) {
+function DownloadButton({children, files}) {
     const dispatch = useAppDispatch();
-
+    
     const clickHandle = async () => {
-        for (let i = 0; i < files.length; i++) {
+        dispatch(downloadFile(files));
+
+       /* for (let i = 0; i < files.length; i++) {
             const file = files[i];
             dispatch(downloadFile(file));
-        }
+        }*/
     }
 
     return (
         <>
-            <button onClick={clickHandle} className={styles.button + ' ' + styles.upload}>
-                <span className={styles.icon}><Icon name={icon}/></span>
-                {title}
-            </button >
+            <span onClick={clickHandle} className={styles.download}>
+                {children}
+            </span>
         </>
     )
 }
