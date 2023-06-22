@@ -1,15 +1,9 @@
 import 'server-only'
 import { cookies } from 'next/headers';
 import { cache } from 'react';
+import { IUser } from '@/types/user';
 
-export interface IUser {
-    user_id: number,
-    username: string,
-    avatar: string
-}
-
-export const getUserFromCookie = async ()  => {
-    
+export const getUserFromCookie = async (): Promise<IUser|null>  => {
     const cookieStore = cookies();
     const session = cookieStore.get('cloud_session')?.value
     
@@ -20,9 +14,7 @@ export const getUserFromCookie = async ()  => {
     
     const request = await fetch(`http://localhost:4000/auth?session=${session}`, {
         method: "GET",
-        //next: { tags: ['user'] }
         next: { revalidate: 60 },
-        //cache: 'no-store'
     }).catch((error) => {
         console.log(error);
     });
@@ -30,8 +22,6 @@ export const getUserFromCookie = async ()  => {
     if (request?.status !== 200) {
         return null;
     }
-    
-    const user: IUser = await request.json();
 
-    return user;
+    return await request.json();
 }

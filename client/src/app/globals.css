@@ -62,3 +62,23 @@ main
   visibility: hidden;
   line-height: 0;
 }
+
+.page-sidebar
+{
+    width: 300px;
+}
+
+.page-content
+{
+    width: 100%;
+}
+
+.page-container
+{
+    margin: 25px 0px;
+    padding: 25px;
+    min-height: 100%;
+    background: white;
+    box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
+    border-radius: 8px; 
+}

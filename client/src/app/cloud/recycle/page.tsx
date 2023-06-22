@@ -1,22 +1,19 @@
 import 'server-only'
-import Image from 'next/image';
 import styles from './page.module.css';
 import { FilesContainer } from '@/components/files/files-container/FilesContainer';
 import { File } from '@/components/files/file/File';
+import { Sidebar } from '@/components/sidebar/Sidebar';
 import { DragDropArea } from "@/components/drag-drop/DragDropArea";
-import { Button } from "@/components/buttons/button/Button";
-import { UploadButton } from "@/components/buttons/upload-button/UploadButton";
 import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
 import { getFiles } from '@/utils/api/files/get';
-import { convertBytes } from '@/utils/common/bytes';
 import { FilesOverlay } from '@/components/files/files-overlay/FilesOverlay';
 import { IUser } from '@/types/user';
 import { IFile } from '@/types/file';
-import { Sidebar } from '@/components/sidebar/Sidebar';
+import { Button } from '@/components/buttons/button/Button';
 
 async function Cloud() {
 	const user: IUser|null = await getUserFromCookie();
-	const files = await getFiles();
+	const files = await getFiles('recycle');
 
 	if (user === null) {
 		return <></>;
@@ -29,11 +26,17 @@ async function Cloud() {
 		<Sidebar user={user}/>
     	<div className="page-content">
 			<div className="page-container" id="files">
-				<p className={styles.title}>Files</p>
+				<p className={styles.title}>
+					Recycle bin
+					<span className={styles.rightSection}>
+						<Button theme='light'>Clear</Button>
+					</span>
+					
+				</p>
 				<FilesContainer>
 				{
 					files.map((file: IFile) => {
-						return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type}} key={file.file_id}/>
+						return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, expires: file.expires}} key={file.file_id}/>
 					})
 				}
 				</FilesContainer>
@@ -44,13 +47,5 @@ async function Cloud() {
     </>
   )
 }
-
-/*
-<File data={{id: 1, name: "movie", extension: ".mp4"}}/>
-<File data={{id: 2, name: "document", extension: ".txt"}}/>
-<File data={{id: 3, name: "piedpiper", extension: ".c"}}/>
-<File data={{id: 4, name: "game", extension: ".exe"}}/>
-<File data={{id: 5, name: "unknown", extension: ""}}/>
-*/
 
 export default Cloud;

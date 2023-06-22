@@ -1,6 +1,7 @@
+import { IUser } from '@/types/user';
 import { cache } from 'react';
 
-export const getUserFromSession = async (session: string) => {
+export const getUserFromSession = async (session: string): Promise<IUser|null> => {
     
     if (!session) {
         return null;
@@ -17,8 +18,6 @@ export const getUserFromSession = async (session: string) => {
     if (request?.status !== 200) {
         return null;
     }
-    
-    const user = await request.json();
 
-    return user;
+    return await request.json();
 }

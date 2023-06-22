@@ -2,6 +2,7 @@
 {
     --color: #000000cc;
     --background-color: transparent;
+    --background-color-hover: #3a424b0a;
     --icon-color: #505050;
 }
 
@@ -9,6 +10,7 @@
 {
     --color: #000000cc;
     --background-color: #FFFFFF;
+    --background-color-hover: #3a424b0a;
     --icon-color: #505050;
 }
 
@@ -16,6 +18,7 @@
 {
     --color: #000000cc;
     --background-color: #3a424b1a;
+    --background-color-hover: #3a424b12;
     --icon-color: #505050;
 }
 
@@ -23,6 +26,7 @@
 {
     --color: #FFFFFF;
     --background-color: #336fee;
+    --background-color-hover: #336feec7;
     --icon-color: #FFFFFF;
 }
 
@@ -45,6 +49,11 @@
     align-items: center;
     flex-direction: row;
     gap: 10px;
+}
+
+.button:hover
+{
+    background: var(--background-color-hover);
 }
 
 

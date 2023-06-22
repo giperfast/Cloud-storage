@@ -2,26 +2,36 @@
 import Link from 'next/link';
 import styles from './Button.module.css';
 import { Icon } from '@/components/icon/Icon';
-import { createRef } from 'react';
-import { uploadFiles } from '@/utils/api/files/upload';
 
-import { useRouter } from 'next/navigation';
-
-
-function Button({children, icon = '', theme = ''}) {
+function Button({children, href = '', icon = '', theme = ''}) {
 
     const theme_class = styles[theme] === undefined ? styles.transparent : styles[theme];
 
+    if (href === '') {
+        return (
+            <>
+                <button className={styles.button + ' ' + theme_class}>
+                    {
+                        icon ? <span className={styles.icon}><Icon name={icon}/></span>
+                        : ''
+                    }
+    
+                    {children}
+                </button>
+            </>
+        )
+    }
+
     return (
         <>
-            <button className={styles.button + ' ' + theme_class}>
+            <Link href={href} className={styles.button + ' ' + theme_class}>
                 {
                     icon ? <span className={styles.icon}><Icon name={icon}/></span>
                     : ''
                 }
 
                 {children}
-            </button >
+            </Link>
         </>
     )
 }

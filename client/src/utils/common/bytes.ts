@@ -1,6 +1,6 @@
 'use server'
 
-export async function convertBytes(bytes, type) {
+export async function convertBytes(bytes: number, type: string) {
     let result = 0;
     switch (type) {
         case 'GB':

@@ -17,7 +17,6 @@ export class AuthController {
 		if (user === undefined) {
 			throw new HttpException('Session not found', HttpStatus.FORBIDDEN);
 		}
-
 		
 		const result = {
 			id: user.id,
@@ -28,7 +27,7 @@ export class AuthController {
 			},
 		}
 
-		console.log(result);
+		//console.log(result);
 
     	return result;
   	}

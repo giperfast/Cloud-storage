@@ -3,8 +3,9 @@ import { generateFullName } from '@/utils/files/files';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios';
 import { parseCookies } from 'nookies'
+import { IFileData } from '../../components/files/file/File';
 
-export const downloadFile = createAsyncThunk('downloadFiles/download', async function(files, {dispatch, getState}) {
+export const downloadFile = createAsyncThunk('downloadFiles/download', async function(files: Array<IFileData>, {dispatch, getState}) {
     
     if (files === null) {
         return false;
@@ -21,7 +22,6 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
     const stateFiles = selectDownloadFiles(state);
     
     const id = stateFiles.length !== 0 ? stateFiles.at(-1).id + 1 : 0 ;
-    //dispatch(setFiles([...stateFiles, {id: id, file_id: files['file_id'], name: files['name'], extension: files['extension'], progress: 0}]));
 
     if (files.length > 1) {
         dispatch(setFiles([...stateFiles, {id: id, file_id: '', name: 'files', extension: 'zip', progress: 0}]));
@@ -29,10 +29,7 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
         dispatch(setFiles([...stateFiles, {id: id, file_id: files[0]['file_id'], name: files[0]['name'], extension: files[0]['extension'], progress: 0}]));
     }
 
-   
-
     let query = new URLSearchParams();
-    //query.append('file', file['file_id']);
 
     for (const file of files) {
         query.append('file', file.file_id);
@@ -65,8 +62,10 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
         },
     });
 
+    console.log(result.headers['content-type']);
+    
     const blob = new Blob([result.data], {
-        type: file['type'],
+        type: result.headers['content-type'],
     });
 
     const file_url = window.URL.createObjectURL(blob);

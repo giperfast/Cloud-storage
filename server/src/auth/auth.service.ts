@@ -63,4 +63,10 @@ export class AuthService {
 
 		return session?.user;
 	}
+
+	async getSessions(): Promise<any> {
+		const sessions = await this.databaseService.session.findMany({})
+
+		return sessions;
+	}
 }

@@ -6,8 +6,12 @@ import { UserModule } from './user/user.module';
 import { FilesModule } from './files/files.module';
 
 @Module({
-  imports: [AuthModule, UserModule, FilesModule],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		AuthModule,
+  		UserModule,
+    	FilesModule,
+  	],
+  	controllers: [AppController],
+  	providers: [AppService],
 })
 export class AppModule {}

@@ -17,7 +17,6 @@ const userRoutes = [
 export async function middleware(request: NextRequest) {
     const session: any = request.cookies.get('cloud_session')?.value;
     const user = await getUserFromSession(session);
-    //console.log(user, session);
     
     for (let i = 0; i < guestRoutes.length; i++) {
         const guestRoute = guestRoutes[i];
@@ -38,4 +37,14 @@ export async function middleware(request: NextRequest) {
             }
         }
     }
+
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-url', request.nextUrl.pathname);
+
+    return NextResponse.next({
+        request: {
+            // Apply new request headers
+            headers: requestHeaders,
+        }
+    });
 }

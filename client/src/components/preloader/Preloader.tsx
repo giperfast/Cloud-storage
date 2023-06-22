@@ -1,12 +1,12 @@
 import React from 'react';
-import classes from './Preloader.module.css';
+import styles from './Preloader.module.css';
 
 function Preloader() {
     return (
-        <div className={classes.preloader}>
-            <div className={classes.bounce + ' ' + classes.bounceFirst}></div>
-            <div className={classes.bounce + ' ' + classes.bounceSecond}></div>
-            <div className={classes.bounce}></div>
+        <div className={styles.preloader}>
+            <div className={styles.bounce + ' ' + styles.bounceFirst}></div>
+            <div className={styles.bounce + ' ' + styles.bounceSecond}></div>
+            <div className={styles.bounce}></div>
         </div>
     );
 }

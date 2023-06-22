@@ -37,6 +37,38 @@ export class FilesService {
 		return files;
 	}
 
+	async getDeletedFiles(userId): Promise<object> {
+		const files = await this.databaseService.deletedFile.findMany({
+			where: {
+				userId: userId
+			}
+		})
+
+		return files;
+	}
+
+	async copyFileToRecycleBin(file_data): Promise<object> {
+		const file = await this.databaseService.deletedFile.create({
+			data: {
+				file_id: file_data.file_id,
+				name: file_data.name,
+				extension: file_data.extension,
+				size: file_data.size,
+				type: file_data.type,
+				expires: Math.floor(Date.now()/1000) + 86400,
+				userId: file_data.userId
+			}
+		})
+
+		await this.databaseService.file.delete({
+			where: {
+				file_id: file_data.file_id,
+			},
+		})
+		
+		return file;
+	}
+
 	async getFilesTotalSize(userId): Promise<number> {
 		const files = await this.getFiles(userId);
 
@@ -57,39 +89,6 @@ export class FilesService {
 		})
 		
 		return file;
-	}
-
-	zipFiles(files) {
-	  return new Promise((resolve, reject) => {
-		const buffs = []
-	
-		const converter = new Writable()
-	
-		converter._write = (chunk, encoding, cb) => {
-		  buffs.push(chunk)
-		  process.nextTick(cb)
-		}
-	
-		converter.on('finish', () => {
-		  resolve(Buffer.concat(buffs))
-		})
-	
-		const archive = archiver('zip', {
-		  zlib: { level: 9 }
-		})
-	
-		archive.on('error', err => {
-		  reject(err)
-		})
-	
-		archive.pipe(converter)
-	
-		for (const file of files) {
-		  archive.append(file.data, { name: file.name })
-		}
-	
-		archive.finalize()
-	  })
 	}
 
 	getUrl(userId: number, name: string): string {

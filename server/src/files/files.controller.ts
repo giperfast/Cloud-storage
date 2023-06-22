@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UploadedFiles, UseInterceptors, Req, Res, Query } from '@nestjs/common';
+import { Controller, Get, Post, UploadedFiles, UseInterceptors, Req, Res, Query, Body } from '@nestjs/common';
 import { FilesInterceptor} from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { FilesService } from './files.service';
@@ -43,9 +43,28 @@ export class FilesController {
   	}
 
 	@Get('/')
-	async getFiles(@Req() request: Request): Promise<any> {
+	async getFiles(@Req() request: Request, @Query() query: string): Promise<any> {
 		const user = await this.authService.fromBaerer(request);
-		const files = this.filesService.getFiles(user.id);
+		let files = {};
+		console.log(query);
+		
+		switch (query['type']) {
+			case 'recent':
+				break;
+
+			case 'photo':
+				break;
+
+			case 'recycle':
+				files = await this.filesService.getDeletedFiles(user.id);
+				break;
+		
+			default:
+				files = await this.filesService.getFiles(user.id);
+				break;
+		}
+		console.log(files);
+		
 		return files;
 	}
 
@@ -55,39 +74,33 @@ export class FilesController {
 
 		if (!Array.isArray(query['file'])) {
 			const file_hash = query['file'];
-			const file = await this.filesService.getFileFromId(file_hash)
-			const path = this.filesService.getUrl(user.id, file['file_id'])
+			const file = await this.filesService.getFileFromId(file_hash);
+			const path = this.filesService.getUrl(user.id, file['file_id']);
 			const compressed_buffer = readFileSync(path);
 			const uncompressed_buffer = unzipSync(compressed_buffer);
 			//response.attachment('test.zip');
+			response.setHeader('content-type', file['type']);
 			return response.send(uncompressed_buffer);
 		}
-
 		
 		let archive = archiver('zip');
-		const converter = new Writable()
+		const converter = new Writable();
 		const buffs = [];
 		
 		response.attachment('files.zip');
+		response.setHeader('content-type', 'application/zip');
 
 		converter._write = (chunk, encoding, cb) => {
-			buffs.push(chunk)
-			process.nextTick(cb)
+			buffs.push(chunk);
+			process.nextTick(cb);
 		}
 	  
 		converter.on('finish', () => {
-			
-			/*response.write('test');
-			response.write(Buffer.concat(buffs));
-			return response.end();*/
-
-			//response.write("bar");
 			return response.send(Buffer.concat(buffs));
 		})
 
-		archive.pipe(converter)
+		archive.pipe(converter);
 		
-		//response.send('unzipping')
 		for (const file_hash of query['file']) {
 			const file_data = await this.filesService.getFileFromId(file_hash)
 			const path = this.filesService.getUrl(user.id, file_hash)
@@ -97,5 +110,24 @@ export class FilesController {
 		}
 		
 		archive.finalize();
+	}
+
+	@Post('/delete')
+	async deleteFiles(@Req() request: Request, @Body() body: Array<string>): Promise<any> {
+		await this.authService.fromBaerer(request)
+		console.log(body);
+		
+
+		for (const file_hash of body['files']) {
+			console.log(file_hash);
+			const file_data = await this.filesService.getFileFromId(file_hash)
+			console.log(file_data);
+			
+			if (file_data === null) {
+				continue;
+			}
+			await this.filesService.copyFileToRecycleBin(file_data)
+		}
+		return true;
 	}
 }

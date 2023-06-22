@@ -1,10 +1,8 @@
 'use server'
-import 'server-only'
 import { cookies } from 'next/headers';
-import { cache } from 'react';
-import { parseCookies } from 'nookies'
+import { IFile } from '@/types/file';
 
-export const getFiles = async () => {
+export const getFiles = async (type: string = 'all'): Promise<Array<IFile>|null> => {
     const cookieStore = cookies();
     const session = cookieStore.get('cloud_session')?.value
     
@@ -12,7 +10,7 @@ export const getFiles = async () => {
         return null;
     }
 
-    const request = await fetch('http://localhost:4000/files', {
+    const request = await fetch(`http://localhost:4000/files?type=${type}`, {
         method: "GET",
         headers: {
             'Accept': 'application/json',
@@ -26,8 +24,6 @@ export const getFiles = async () => {
     if (request?.status !== 200) {
         return null;
     }
-    
-    const files = await request.json();
-    
-    return files;
+
+    return await request.json();
 }

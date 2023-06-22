@@ -5,6 +5,7 @@ import { UploadButton } from '../buttons/upload-button/UploadButton';
 import { selectFiles } from '@/redux/slices/files';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { DownloadButton } from '../buttons/download-button/DownloadButton';
+import { DeleteButton } from '../buttons/delete-button/DeleteButton';
 
 function FileButtons() {
     const contextFile = useAppSelector(selectFiles);
@@ -17,7 +18,9 @@ function FileButtons() {
             </DownloadButton>
             <button className={styles.button}>Share</button>
             <button className={styles.button}>Rename</button>
-            <button className={styles.button}>Delete</button>
+            <DeleteButton files={contextFile}>
+                <button className={styles.button}>Delete</button>
+            </DeleteButton>
             <button className={styles.button}>About</button>
         </>
     )

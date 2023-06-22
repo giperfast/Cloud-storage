@@ -28,6 +28,7 @@
 
 .image_wrapper
 {
+    position: relative;
     margin-bottom: 10px;
     pointer-events: none;
 }
@@ -46,4 +47,16 @@
 .selected
 {
     background-color: #ededed !important;
+}
+
+.expires
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #b2b2b2;
+    padding: 0px 5px;
+    font-size: 13px;
 }
