@@ -27,8 +27,6 @@ export class AuthController {
 			},
 		}
 
-		//console.log(result);
-
     	return result;
   	}
 

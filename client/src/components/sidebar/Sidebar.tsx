@@ -8,7 +8,6 @@ import { IUser } from '@/types/user';
 //import { useRouter } from 'next/router'
 import { headers } from 'next/headers';
 
-
 const buttons = [
     { 
         title: 'All files',
@@ -34,8 +33,7 @@ const buttons = [
 
 function Sidebar({user}: {user: IUser}) {
     const headersList = headers();
-    const header_url = headersList.get('x-url') || "";
-    console.log(header_url);
+    const path = headersList.get('x-url');
     
     const can_upload = user.storage.used <= user.storage.total;
     const usage_percent = (100 * user.storage.used) / user.storage.total;
@@ -52,7 +50,7 @@ function Sidebar({user}: {user: IUser}) {
                 {
                     buttons.map((button, index) => {
                         return (
-                        <Button href={button.href} icon={button.icon} theme={header_url === button.href ? 'gray' : 'transparent'} key={index}>
+                        <Button href={button.href} icon={button.icon} theme={path === button.href ? 'gray' : 'transparent'} key={index}>
                             {button.title}
                         </Button>
                         )

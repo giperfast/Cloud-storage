@@ -10,7 +10,7 @@ export const deleteFiles = async (files: Array<IFile>) => {
     
     var data = new URLSearchParams();
     for (const file of files) {
-        data.append('files', file.file_id);
+        data.append('files[]', file.file_id);
     }
     
     const cookies = parseCookies()
@@ -21,7 +21,7 @@ export const deleteFiles = async (files: Array<IFile>) => {
         return false;
     }
 
-    await axios.post('http://localhost:4000/files/delete', data, {
+    await axios.post('http://localhost:4000/files/restore', data, {
         headers: {
             'Accept': 'application/json',
             'Authorization': `bearer ${session}`

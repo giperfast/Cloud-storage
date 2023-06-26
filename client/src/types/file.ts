@@ -4,4 +4,5 @@ export interface IFile {
     extension: string,
     type: string,
     expires?: number,
+    index?: number
 }

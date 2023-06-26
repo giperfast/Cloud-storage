@@ -22,30 +22,30 @@ async function Cloud() {
 	const can_upload = user.storage.used <= user.storage.total;
 
   	return (
-    <>
-		<Sidebar user={user}/>
-    	<div className="page-content">
-			<div className="page-container" id="files">
-				<p className={styles.title}>
-					Recycle bin
-					<span className={styles.rightSection}>
-						<Button theme='light'>Clear</Button>
-					</span>
-					
-				</p>
-				<FilesContainer>
-				{
-					files.map((file: IFile) => {
-						return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, expires: file.expires}} key={file.file_id}/>
-					})
-				}
-				</FilesContainer>
+		<>
+			<Sidebar user={user}/>
+			<div className="page-content">
+				<div className="page-container" id="files">
+					<p className={styles.title}>
+						Recycle bin
+						<span className={styles.rightSection}>
+							<Button theme='light'>Clear</Button>
+						</span>
+						
+					</p>
+					<FilesContainer>
+					{
+						files.map((file: IFile) => {
+							return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, expires: file.expires}} key={file.file_id}/>
+						})
+					}
+					</FilesContainer>
+				</div>
 			</div>
-    	</div>
-		<FilesOverlay/>
-		<DragDropArea isActive={can_upload}/>
-    </>
-  )
+			<FilesOverlay/>
+			<DragDropArea isActive={can_upload}/>
+		</>
+	)
 }
 
 export default Cloud;

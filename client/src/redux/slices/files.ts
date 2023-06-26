@@ -14,18 +14,15 @@ export const filesSlice = createSlice({
             state.files = [];
         },
         addFile: (state, action: PayloadAction<any>) => {
+            if (state.files.findIndex((file) => file.file_id == action.payload.file_id) !== -1) {
+                return;
+            }
+
             state.files = [...state.files, action.payload]
         },
         removeFile: (state, action: PayloadAction<any>) => {
             state.files = state.files.filter((file) => file.file_id != action.payload);
         },
-
-        /*setContextFile: (state, action: PayloadAction<any>) => {
-            state.contextFile = [action.payload];
-        },
-        removeContextFile: (state) => {
-            state.contextFile = [];
-        },*/
     },
 })
 

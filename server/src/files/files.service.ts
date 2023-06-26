@@ -12,7 +12,7 @@ import { Writable } from 'stream'
 export class FilesService {
   	constructor(private readonly databaseService: DatabaseService) {}
 
-	async createFile(file_data, userId): Promise<string> {
+	async createFileFromClient(file_data, userId): Promise<string> {
 		const file = await this.databaseService.file.create({
 			data: {
 				file_id: randomBytes(32).toString('hex'),
@@ -21,6 +21,21 @@ export class FilesService {
 				size: this.getSize(file_data),
 				type: this.getType(file_data),
 				userId: userId
+			}
+		})
+
+		return file.file_id;
+	}
+
+	async createFile(file_data): Promise<string> {
+		const file = await this.databaseService.file.create({
+			data: {
+				file_id: file_data.file_id,
+				name: file_data.name,
+				extension: file_data.extension,
+				size: file_data.size,
+				type: file_data.type,
+				userId: file_data.userId
 			}
 		})
 
@@ -37,7 +52,17 @@ export class FilesService {
 		return files;
 	}
 
-	async getDeletedFiles(userId): Promise<object> {
+	async delete(file_data): Promise<boolean> {
+		await this.databaseService.file.delete({
+			where: {
+				file_id: file_data.file_id
+			}
+		})
+
+		return true;
+	}
+
+	/*async getDeletedFiles(userId): Promise<object> {
 		const files = await this.databaseService.deletedFile.findMany({
 			where: {
 				userId: userId
@@ -45,9 +70,9 @@ export class FilesService {
 		})
 
 		return files;
-	}
+	}*/
 
-	async copyFileToRecycleBin(file_data): Promise<object> {
+	/*async copyFileToRecycleBin(file_data): Promise<object> {
 		const file = await this.databaseService.deletedFile.create({
 			data: {
 				file_id: file_data.file_id,
@@ -67,7 +92,7 @@ export class FilesService {
 		})
 		
 		return file;
-	}
+	}*/
 
 	async getFilesTotalSize(userId): Promise<number> {
 		const files = await this.getFiles(userId);
@@ -90,6 +115,16 @@ export class FilesService {
 		
 		return file;
 	}
+
+	/*async getRecycleBinFileFromId(file_id): Promise<object> {
+		const file = await this.databaseService.deletedFile.findUnique({
+			where: {
+				file_id: file_id
+			}
+		})
+		
+		return file;
+	}*/
 
 	getUrl(userId: number, name: string): string {
 		const index: number = Math.floor(userId/100);

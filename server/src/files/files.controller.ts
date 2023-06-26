@@ -8,12 +8,13 @@ import { writeFile, readFileSync, createWriteStream } from 'fs';
 import { gzip, unzip, unzipSync } from 'zlib';
 import { Buffer } from "buffer";
 import { Writable } from 'stream'
+import { RecycleBinService } from './recyclebin.service';
 const archiver = require('archiver');
 var Stream = require('stream');
 
 @Controller('files')
 export class FilesController {
-	constructor(private readonly filesService: FilesService, private readonly authService: AuthService) {}
+	constructor(private readonly filesService: FilesService, private readonly recyclebinService: RecycleBinService, private readonly authService: AuthService) {}
 
 	@Post('/upload')
 	@UseInterceptors(FilesInterceptor('file'))
@@ -23,7 +24,7 @@ export class FilesController {
 		for (const file of files) {
 			console.log(file);
 			
-			const hash = await this.filesService.createFile(file, user.id);
+			const hash = await this.filesService.createFileFromClient(file, user.id);
 			const path = this.filesService.getUrl(user.id, hash);
 
 			gzip(file.buffer, function (_, result_buffer) {
@@ -56,7 +57,7 @@ export class FilesController {
 				break;
 
 			case 'recycle':
-				files = await this.filesService.getDeletedFiles(user.id);
+				files = await this.recyclebinService.getFiles(user.id);
 				break;
 		
 			default:
@@ -113,21 +114,45 @@ export class FilesController {
 	}
 
 	@Post('/delete')
-	async deleteFiles(@Req() request: Request, @Body() body: Array<string>): Promise<any> {
+	async deleteFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
 		await this.authService.fromBaerer(request)
 		console.log(body);
-		
+		response.status(200).send({ success: true });
 
 		for (const file_hash of body['files']) {
 			console.log(file_hash);
-			const file_data = await this.filesService.getFileFromId(file_hash)
-			console.log(file_data);
+			const file = await this.filesService.getFileFromId(file_hash)
+			console.log(file);
 			
-			if (file_data === null) {
+			if (file === null) {
 				continue;
 			}
-			await this.filesService.copyFileToRecycleBin(file_data)
+
+			await this.recyclebinService.createFile(file);
+			await this.filesService.delete(file);
 		}
+
+		return true;
+	}
+
+	@Post('/restore')
+	async restoreFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
+		await this.authService.fromBaerer(request)
+		console.log(body);
+		response.status(200).send({ success: true });
+
+		for (const file_hash of body['files']) {
+			//console.log(file_hash);
+			const file = await this.recyclebinService.getFileFromId(file_hash)
+			console.log(file);
+			
+			if (file === null) {
+				continue;
+			}
+			await this.filesService.createFile(file);
+			await this.recyclebinService.delete(file);
+		}
+
 		return true;
 	}
 }

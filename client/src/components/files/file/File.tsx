@@ -16,9 +16,14 @@ export interface IFileProps {
 
 const File = ({data, selected = false}: IFileProps) => {
     const dispatch = useAppDispatch();
-    //const [time, setTime] = useState(data.expires);
 
     const clickHandle = (e: any) => {
+
+        if (e.shiftKey) {
+            dispatch(addFile(data));
+            return;
+        }
+
         if (!e.ctrlKey) {
             dispatch(setFiles(data));
             return true;
@@ -40,22 +45,18 @@ const File = ({data, selected = false}: IFileProps) => {
     }
 
 
-
-    /*useEffect(() => {
-        if (time === undefined) {
-            return;
+    useEffect(() => {
+        if (selected === true) {
+            dispatch(addFile(data));
         }
-        setInterval(() => {
-            setTime(prev => prev - 1)
-        }, 1000)
-    }, [])*/
-
+    }, [selected])
 
     const selectedClass = selected ? styles.selected : '';
+    const fileTypeClass = data.expires ? 'inRecyclebin' : '';
     const fullName = `${data.name}.${data.extension}`;
     
     return (
-        <div className={styles.file + ' ' + selectedClass} onClick={clickHandle} onContextMenu={contextMenuHandle}>
+        <div className={styles.file + ' ' + fileTypeClass + ' ' + selectedClass} onClick={clickHandle} onContextMenu={contextMenuHandle}>
             
             <div className={styles.image_wrapper}>
                 <Image src={getImage(data.type)} width={80} height={80} alt="unknown file"/>
