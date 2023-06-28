@@ -6,14 +6,19 @@ import { useRouter } from 'next/navigation';
 import { userRegister } from '@/utils/api/user/register';
 import { userLogin } from '@/utils/api/user/login';
 import { IResult } from '../../utils/api/result/result';
+import { Preloader } from '@/components/preloader/Preloader';
+
+const BUTTON_TITLE = 'REGISTER';
 
 function Register() {
 	const router = useRouter();
 	const [error, setError] = useState('');
+	const [buttonHTML, setButtonHTML] = useState(BUTTON_TITLE);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
+		setButtonHTML(<Preloader/>);
 		const username: string = e.target.querySelector("#username").value;
 		const password: string = e.target.querySelector("#password").value;
 
@@ -27,8 +32,10 @@ function Register() {
 
 		if (logined) {
 			router.refresh();
-			router.push('/cloud'); //account
+			router.push('/cloud');
 		}
+
+		setButtonHTML(BUTTON_TITLE)
 	}
 
   	return (
@@ -47,7 +54,7 @@ function Register() {
 						{
 							error ? <div className={styles.error}>{error}</div> : ''
 						}
-						<button type="submit" className={styles.button}>REGISTER</button>
+						<button type="submit" className={styles.button}>{buttonHTML}</button>
 					</form>
 				</div>
 			</div>

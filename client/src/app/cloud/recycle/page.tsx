@@ -10,6 +10,8 @@ import { FilesOverlay } from '@/components/files/files-overlay/FilesOverlay';
 import { IUser } from '@/types/user';
 import { IFile } from '@/types/file';
 import { Button } from '@/components/buttons/button/Button';
+import { ContextMenu } from '@/components/context-menu/ContextMenu';
+import { RecyclebinButtons } from '@/components/context-menu/recyclebin/RecyclebinButtons';
 
 async function Cloud() {
 	const user: IUser|null = await getUserFromCookie();
@@ -35,8 +37,8 @@ async function Cloud() {
 					</p>
 					<FilesContainer>
 					{
-						files.map((file: IFile) => {
-							return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, expires: file.expires}} key={file.file_id}/>
+						files.map((file: IFile, index: number) => {
+							return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, expires: file.expires, index: index}} key={file.file_id}/>
 						})
 					}
 					</FilesContainer>
@@ -44,6 +46,9 @@ async function Cloud() {
 			</div>
 			<FilesOverlay/>
 			<DragDropArea isActive={can_upload}/>
+			<ContextMenu>
+				<RecyclebinButtons/>
+			</ContextMenu>
 		</>
 	)
 }

@@ -29,14 +29,15 @@ export const userLogin = async (dto: loginDTO): Promise<IResult> => {
 	}
 
 	const date:any = Date.now() + 2592000000;
-	/*cookies().set({
+	
+	cookies().set({
 		name: 'cloud_session',
 		value: json.session,
 		expires: date, // месяц
 		path: '/',
-	});*/
+	});
 
-	cookies().set('cloud_session', json.session)
+	//cookies().set('cloud_session', json.session)
 
 	return result(true);
 }

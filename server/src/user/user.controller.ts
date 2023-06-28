@@ -26,9 +26,9 @@ export class UserController {
 		return this.authService.deleteSession(session);
 	}
 
-	@Post('/create')
+	@Post('/register')
 	@UsePipes(new ValidationPipe())
-	async Create(@Body() body:UserDto): Promise<any> {
+	async Register(@Body() body:UserDto): Promise<any> {
 		await this.userService.create(body);
 		return true;
 	}

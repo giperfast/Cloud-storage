@@ -56,7 +56,7 @@ const File = ({data, selected = false}: IFileProps) => {
     const fullName = `${data.name}.${data.extension}`;
     
     return (
-        <div className={styles.file + ' ' + fileTypeClass + ' ' + selectedClass} onClick={clickHandle} onContextMenu={contextMenuHandle}>
+        <div className={styles.file + ' ' + fileTypeClass + ' ' + selectedClass} onClick={clickHandle} onContextMenu={contextMenuHandle} index={data.index}>
             
             <div className={styles.image_wrapper}>
                 <Image src={getImage(data.type)} width={80} height={80} alt="unknown file"/>

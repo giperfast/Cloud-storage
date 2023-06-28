@@ -9,7 +9,6 @@ import { Footer } from '@/components/footer/footer'
 import { Icon } from '@/components/icon/Icon';
 import { ClientProvider } from '@/redux/ClientProvider';
 import { FilesManagerOverlay } from '@/components/files/files-manager-overlay/FilesManagerOverlay'
-import { ContextMenu } from '@/components/context-menu/ContextMenu';
 
 //const inter = Inter({ subsets: ['latin'] });
 
@@ -39,7 +38,6 @@ function RootLayout({
 					<div className="background-cloud">
 						<Icon name="cloud"/>
 					</div>
-					<ContextMenu/>
 				</ClientProvider>
 			</body>
 		</html>

@@ -4,10 +4,12 @@ import { FilesService } from './files.service';
 import { DatabaseModule } from '../database/database.module';
 import { RecycleBinService } from './recyclebin.service';
 import { AuthService } from '../auth/auth.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronService } from './cron.service';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, ScheduleModule.forRoot()],
   controllers: [FilesController],
-  providers: [FilesService, RecycleBinService, AuthService],
+  providers: [FilesService, RecycleBinService, AuthService, CronService],
 })
 export class FilesModule {}

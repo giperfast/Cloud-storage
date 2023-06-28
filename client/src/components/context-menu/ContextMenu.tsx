@@ -1,80 +1,14 @@
 'use client'
-import { useEffect, memo, useCallback, useState } from 'react';
+import { useEffect, memo, useCallback, useState, Children } from 'react';
 import styles from './ContextMenu.module.css';
-import { UploadButton } from '../buttons/upload-button/UploadButton';
-import { selectFiles } from '@/redux/slices/files';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { DownloadButton } from '../buttons/download-button/DownloadButton';
-import { DeleteButton } from '../buttons/delete-button/DeleteButton';
 
-function FileButtons() {
-    const contextFile = useAppSelector(selectFiles);
-    console.log(contextFile);
+const ContextMenu = memo(({children}) => {
+    const [active, setActive] = useState(true);
+    const [position, setPosition] = useState({x: 0, y: 0});
     
-    return (
-        <>
-            <DownloadButton files={contextFile}>
-                <button className={styles.button}>Download</button>
-            </DownloadButton>
-            <button className={styles.button}>Share</button>
-            <button className={styles.button}>Rename</button>
-            <DeleteButton files={contextFile}>
-                <button className={styles.button}>Delete</button>
-            </DeleteButton>
-            <button className={styles.button}>About</button>
-        </>
-    )
-}
-
-function ContainerButtons() {
-    return (
-        <>
-            <UploadButton isActive={true}>
-                <button className={styles.button}>Upload</button>
-            </UploadButton>
-            <button className={styles.button}>Create folder</button>
-        </>
-    )
-}
-
-const ContextMenu = memo(() => {
-    const dispatch = useAppDispatch();
-
-    const [active, setActive] = useState(false);
-    const [type, setType] = useState('');
-    const [mousePos, setMousePos] = useState({x: 0, y: 0});
-
-    const getButtonsFromType = (type: string) => {
-        switch (type) {
-            case 'file':
-                return <FileButtons/>;
-            default:
-                return <ContainerButtons/>;
-        }
-    }
-
     const contextMenuHandler = useCallback((e) => {
-        const target = e.target;
-
-        if (target.closest('.fileWrapper')) {
-            e.preventDefault();
-            setType('file')
-            setMousePos({x: e.pageX, y: e.pageY});
-            setActive(true);
-            console.log('file');
-            return true
-        }
-
-        if (target.closest('#files')) {
-            e.preventDefault();
-            setType('container')
-            setMousePos({x: e.pageX, y: e.pageY});
-            setActive(true);
-            console.log('fileContainer');
-            return true
-        }
-
-        setActive(false);
+        setPosition({x: e.pageX, y: e.pageY});
+        setActive(true);
     }, [])
 
     const windowClickHandler = useCallback((e: any) => {
@@ -97,12 +31,12 @@ const ContextMenu = memo(() => {
             window.removeEventListener('mouseup', windowClickHandler);
         }
     }, [])
-
-    const active_class = active === true ? styles.active : ''
+    
+    const active_class = active === true ? styles.active : '';
 
     return (
-        <div className={styles.menu + ' ' + active_class} style={{left: mousePos.x, top: mousePos.y}} id="context_menu">
-            {getButtonsFromType(type)}
+        <div className={styles.menu + ' ' + active_class} style={{left: position.x, top: position.y}} id="context_menu">
+            {children}
         </div>
     )
 })

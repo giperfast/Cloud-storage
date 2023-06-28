@@ -9,6 +9,9 @@ import { FilesOverlay } from '@/components/files/files-overlay/FilesOverlay';
 import { IUser } from '@/types/user';
 import { IFile } from '@/types/file';
 import { Sidebar } from '@/components/sidebar/Sidebar';
+import { ContextMenu } from '@/components/context-menu/ContextMenu';
+import { GlobalButtons } from '@/components/context-menu/global/GlobalButtons';
+import { MouseSelector } from '@/components/mouse-selector/MouseSelector';
 
 async function Cloud() {
 	const user: IUser|null = await getUserFromCookie();
@@ -37,16 +40,12 @@ async function Cloud() {
 			</div>
 			<FilesOverlay/>
 			<DragDropArea isActive={can_upload}/>
+			<ContextMenu>
+				<GlobalButtons/>
+			</ContextMenu>
+			<MouseSelector/>
 		</>
 	)
 }
-
-/*
-<File data={{id: 1, name: "movie", extension: ".mp4"}}/>
-<File data={{id: 2, name: "document", extension: ".txt"}}/>
-<File data={{id: 3, name: "piedpiper", extension: ".c"}}/>
-<File data={{id: 4, name: "game", extension: ".exe"}}/>
-<File data={{id: 5, name: "unknown", extension: ""}}/>
-*/
 
 export default Cloud;
