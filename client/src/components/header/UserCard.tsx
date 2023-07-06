@@ -4,13 +4,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './UserCard.module.css';
 import Image from 'next/image';
+import { IUser } from '@/types/user';
 
-interface UserCardDTO {
-    username: string,
-    avatar: string
-}
 
-function UserCard({ user }:{ user:UserCardDTO }) {
+function UserCard({user}:{user:IUser}) {
     const [isOpened, setIsOpened] = useState(false);
     
     const clickHandle = (e: any) => {

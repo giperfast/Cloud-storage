@@ -1,3 +1,4 @@
+//'use server'
 import { IUser } from '@/types/user';
 import { cache } from 'react';
 

@@ -5,7 +5,7 @@ import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { userLogin } from '@/utils/api/user/login';
 import { IResult } from '../../utils/api/result/result';
-import { Preloader } from '@/components/preloader/Preloader';
+import { Preloader } from '@/components/UI/preloader/Preloader';
 
 const BUTTON_TITLE = 'LOGIN';
 

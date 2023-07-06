@@ -5,10 +5,11 @@ import { DatabaseModule } from '../database/database.module';
 import { FilesService } from 'src/files/files.service';
 import { CronService } from './cron.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { RecycleBinService } from 'src/files/recyclebin.service';
 
 @Module({
   imports: [DatabaseModule, ScheduleModule.forRoot()],
   controllers: [AuthController],
-  providers: [AuthService, FilesService, CronService],
+  providers: [AuthService, FilesService, RecycleBinService, CronService],
 })
 export class AuthModule {}

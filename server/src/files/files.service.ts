@@ -12,15 +12,19 @@ import { Writable } from 'stream'
 export class FilesService {
   	constructor(private readonly databaseService: DatabaseService) {}
 
-	async createFileFromClient(file_data, userId): Promise<string> {
+	async createFileFromClient(file_data, user_id, path=null): Promise<string> {
+		const hash = randomBytes(32).toString('hex');
 		const file = await this.databaseService.file.create({
 			data: {
-				file_id: randomBytes(32).toString('hex'),
+				file_id: hash,
 				name: this.getName(file_data),
 				extension: this.getExtension(file_data),
 				size: this.getSize(file_data),
 				type: this.getType(file_data),
-				userId: userId
+				path: path,
+				childId: null,
+				parentId: null,
+				userId: user_id 
 			}
 		})
 
@@ -35,6 +39,9 @@ export class FilesService {
 				extension: file_data.extension,
 				size: file_data.size,
 				type: file_data.type,
+				path: file_data.path,
+				childId: null,
+				parentId: null,
 				userId: file_data.userId
 			}
 		})
@@ -42,10 +49,47 @@ export class FilesService {
 		return file.file_id;
 	}
 
-	async getFiles(userId): Promise<object> {
+	async createFolder(name, path, user_id, parent): Promise<string> {
+		const hash = randomBytes(32).toString('hex');
+		const folder = await this.databaseService.file.create({
+			data: {
+				file_id: hash,
+				name: name,
+				extension: null,
+				size: 0,
+				type: 'folder',
+				path: path,
+				childId: null,
+				parentId: parent,
+				userId: user_id
+			}
+		})
+
+		return folder.file_id;
+	}
+
+	async getFiles(userId, type='', path=null): Promise<object> {
+		console.log(type, path);
 		const files = await this.databaseService.file.findMany({
 			where: {
-				userId: userId
+				userId: userId,
+				type: {
+					startsWith: type
+				},
+				path: path
+			}
+		})
+		
+		return files;
+	}
+
+	async getPhotos(userId): Promise<object> {
+		const files = await this.databaseService.file.findMany({
+			where: {
+				userId: userId,
+				type: {
+					startsWith: 'image'
+				}
 			}
 		})
 
@@ -61,38 +105,6 @@ export class FilesService {
 
 		return true;
 	}
-
-	/*async getDeletedFiles(userId): Promise<object> {
-		const files = await this.databaseService.deletedFile.findMany({
-			where: {
-				userId: userId
-			}
-		})
-
-		return files;
-	}*/
-
-	/*async copyFileToRecycleBin(file_data): Promise<object> {
-		const file = await this.databaseService.deletedFile.create({
-			data: {
-				file_id: file_data.file_id,
-				name: file_data.name,
-				extension: file_data.extension,
-				size: file_data.size,
-				type: file_data.type,
-				expires: Math.floor(Date.now()/1000) + 86400,
-				userId: file_data.userId
-			}
-		})
-
-		await this.databaseService.file.delete({
-			where: {
-				file_id: file_data.file_id,
-			},
-		})
-		
-		return file;
-	}*/
 
 	async getFilesTotalSize(userId): Promise<number> {
 		const files = await this.getFiles(userId);
@@ -116,25 +128,27 @@ export class FilesService {
 		return file;
 	}
 
-	/*async getRecycleBinFileFromId(file_id): Promise<object> {
-		const file = await this.databaseService.deletedFile.findUnique({
-			where: {
-				file_id: file_id
-			}
-		})
-		
-		return file;
-	}*/
-
-	getUrl(userId: number, name: string): string {
+	getUrl(userId: number, name: string, path: string = null): string {
 		const index: number = Math.floor(userId/100);
-		const path: string = `./files/${index}/${userId}`;
 
-		if (!existsSync(path)){
-			mkdirSync(path, { recursive: true });
+		let server_path: string = '';
+
+		if (path === null) {
+			server_path = `./files/${index}/${userId}`;
+		} else {
+			server_path = `./files/${index}/${userId}/${path}`;
+		}
+
+		if (!existsSync(server_path)){
+			mkdirSync(server_path, { recursive: true });
 		}
 
 		return `${path}/${name}`;
+	}
+
+	getPath(): string {
+		return '';
+		//return `${path}/${name}`;
 	}
 
 	getName(file): string {

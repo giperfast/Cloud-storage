@@ -1,10 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react';
 import styles from './MouseSelector.module.css';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { uploadFile } from '@/redux/slices/uploadFiles';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 const MouseSelector = () => {
     const [active, setActive] = useState(false);
@@ -15,8 +11,11 @@ const MouseSelector = () => {
         if (e.which !== 1) {
             return false;
         }
-        
-        document.body.classList.add('pointer-events-none');
+
+        if (!e.target.closest(`#files`)) {
+            return false;
+        }
+
         setAnchor({x: e.pageX, y: e.pageY});
         setActive(true);
     }, [])
@@ -36,14 +35,14 @@ const MouseSelector = () => {
         if (active !== true) {
             return false;
         }
-
+        document.body.classList.add('pointer-events-none');
         let cords = {...coordinates};
 
         cords.x = e.clientX < anchor.x ? e.clientX : anchor.x;
         cords.y = e.clientY < anchor.y ? e.clientY : anchor.y;
         cords.width = Math.abs(e.clientX - anchor.x);
         cords.height = Math.abs(e.clientY - anchor.y);
-        console.log(cords);
+        //console.log(e.target);
         
         setCoordinates(cords);
     }, [active, coordinates])

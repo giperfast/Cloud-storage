@@ -38,7 +38,7 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
     let lastNow = Date.now();
     let lastKBytes = 0;
 
-    const result = await axios.get(`http://localhost:4000/files/download?${query}`, {
+    const result = await axios.get(`http://46.146.194.137:4000/files/download?${query}`, {
         responseType: 'arraybuffer',
         headers: {
             'Accept': 'application/json',

@@ -22,7 +22,7 @@ const buttons = [
     { 
         title: 'Photo',
         icon: 'file-image',
-        href: '',
+        href: '/cloud/photo',
     },
     { 
         title: 'Recycle',

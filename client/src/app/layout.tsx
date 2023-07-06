@@ -6,7 +6,7 @@ import './globals.css'
 
 import { Header } from '@/components/header/header'
 import { Footer } from '@/components/footer/footer'
-import { Icon } from '@/components/icon/Icon';
+import { Icon } from '@/components/UI/icon/Icon';
 import { ClientProvider } from '@/redux/ClientProvider';
 import { FilesManagerOverlay } from '@/components/files/files-manager-overlay/FilesManagerOverlay'
 

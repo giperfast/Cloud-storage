@@ -6,16 +6,18 @@ import { DragDropArea } from "@/components/drag-drop/DragDropArea";
 import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
 import { getFiles } from '@/utils/api/files/get';
 import { FilesOverlay } from '@/components/files/files-overlay/FilesOverlay';
-import { IUser } from '@/types/user';
-import { IFile } from '@/types/file';
 import { Sidebar } from '@/components/sidebar/Sidebar';
 import { ContextMenu } from '@/components/context-menu/ContextMenu';
 import { GlobalButtons } from '@/components/context-menu/global/GlobalButtons';
 import { MouseSelector } from '@/components/mouse-selector/MouseSelector';
 
-async function Cloud() {
+import { IUser } from '@/types/user';
+import { IFile } from '@/types/file';
+
+async function CloudPage() {
+	//revalidatePath('/');
 	const user: IUser|null = await getUserFromCookie();
-	const files = await getFiles();
+	const files: Array<IFile> = await getFiles();
 
 	if (user === null) {
 		return <></>;
@@ -32,7 +34,7 @@ async function Cloud() {
 					<FilesContainer>
 					{
 						files.map((file: IFile, index: number) => {
-							return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, index: index}} key={file.file_id}/>
+							return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, index: index, path: file.path}} key={file.file_id}/>
 						})
 					}
 					</FilesContainer>
@@ -48,4 +50,4 @@ async function Cloud() {
 	)
 }
 
-export default Cloud;
+export default CloudPage;

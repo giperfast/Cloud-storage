@@ -3,7 +3,7 @@ import styles from './FilesOverlay.module.css';
 import { DownloadButton } from "@/components/buttons/download-button/DownloadButton";
 import { Button } from "@/components/buttons/button/Button";
 import { generateShortName, generateFullName } from '@/utils/files/files';
-import { Icon } from '@/components/icon/Icon';
+import { Icon } from '@/components/UI/icon/Icon';
 import { useAppSelector } from '@/redux/hooks';
 import { selectFiles } from '@/redux/slices/files';
 

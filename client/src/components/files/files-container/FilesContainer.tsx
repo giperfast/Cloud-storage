@@ -3,6 +3,7 @@ import { Children, useEffect, isValidElement, cloneElement, useCallback, useStat
 import styles from './FilesContainer.module.css';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addFile, removeFiles, selectContextFile, selectFiles, setFiles } from '@/redux/slices/files';
+import { IFile } from '@/types/file';
 
 function FilesContainer({children}: any) {
     const files = useAppSelector(selectFiles);
@@ -13,7 +14,7 @@ function FilesContainer({children}: any) {
     
 
     const isSelect = (file_id: string): boolean => {
-        return files.findIndex((file) => file.file_id == file_id) !== -1;
+        return files.findIndex((file: IFile) => file.file_id == file_id) !== -1;
     }
     
     const windowClickHandler = useCallback((e: any) => {

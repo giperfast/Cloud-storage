@@ -1,12 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
-import * as cors from 'cors';
+//import * as cors from 'cors';
 //const cors = require('cors')
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.use(cookieParser());
+
   app.enableCors({
     origin: [/^(.*)/],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -15,6 +17,16 @@ async function bootstrap() {
     credentials: true,
     allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization,authorization,X-Forwarded-for'
   });
+
+  /*app.use((request: any, response: any, next: any) => {
+    console.log(response.locals);
+    
+    //const token = req.csrfToken();
+    //res.cookie('XSRF-TOKEN', token);
+    //response.locals.csrfToken = token;
+
+    next();
+  });*/
   //app.use(cors({credentials: true, origin: true}));
   await app.listen(4000);
 }

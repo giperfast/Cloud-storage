@@ -1,0 +1,55 @@
+.breadcrumbs
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.current
+{
+    margin-right: 10px;
+}
+
+.crumbs
+{
+    display: flex;
+    flex-direction: row;
+    font-size: 16px;
+    color: #00000080;
+}
+
+.route
+{
+    position: relative;
+    padding-left: 14px;
+    padding-right: 16px;
+    cursor: pointer;
+}
+
+.route:first-child
+{
+    padding-left: 0px;
+}
+
+.route:after
+{
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    margin-top: -1px;
+    right: 2px;
+    border-color: #00000059;
+    border-style: solid solid none none;
+    border-width: 2px;
+    width: 5px;
+    height: 5px;
+    -webkit-transform: rotate(45deg) translateY(-50%);
+    transform: rotate(45deg) translateY(-50%);
+    pointer-events: none;
+}
+
+.route:hover
+{
+    color: #000000c4;
+}

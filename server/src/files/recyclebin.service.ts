@@ -41,6 +41,18 @@ export class RecycleBinService {
 		return files;
 	}
 
+	async getFilesTotalSize(userId): Promise<number> {
+		const files = await this.getFiles(userId);
+
+		let size = 0;
+		for (let index = 0; index < Object.keys(files).length; index++) {
+			const file = files[index];
+			size += file['size']
+		}
+
+		return size;
+	}
+
 	async getFileFromId(file_id): Promise<object> {
 		const file = await this.databaseService.deletedFile.findUnique({
 			where: {

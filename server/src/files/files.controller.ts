@@ -18,21 +18,22 @@ export class FilesController {
 
 	@Post('/upload')
 	@UseInterceptors(FilesInterceptor('file'))
-  	async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>, @Req() request: Request): Promise<any> {
+  	async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>, @Req() request: Request, @Query() query: string): Promise<any> {
+		console.log('user');
 		const user = await this.authService.fromBaerer(request);
+		console.log(user);
+		
 		let result = [];
 		for (const file of files) {
-			console.log(file);
-			
-			const hash = await this.filesService.createFileFromClient(file, user.id);
-			const path = this.filesService.getUrl(user.id, hash);
+			const hash = await this.filesService.createFileFromClient(file, user.id, query['path'] || null);
+			const path = this.filesService.getUrl(user.id, hash, query['path'] || null);
 
 			gzip(file.buffer, function (_, result_buffer) {
 				writeFile(path, result_buffer, function (err) {
 					if (err) return console.log(err);
 					console.log(path, file.originalname);
 				});
-			})
+			});
 
 			result.push({
 				file_id: hash,
@@ -47,24 +48,25 @@ export class FilesController {
 	async getFiles(@Req() request: Request, @Query() query: string): Promise<any> {
 		const user = await this.authService.fromBaerer(request);
 		let files = {};
-		console.log(query);
-		
+		console.log('get', query);
 		switch (query['type']) {
 			case 'recent':
 				break;
 
 			case 'photo':
+				files = await this.filesService.getFiles(user.id, 'image');
 				break;
 
 			case 'recycle':
 				files = await this.recyclebinService.getFiles(user.id);
 				break;
-		
+			
 			default:
-				files = await this.filesService.getFiles(user.id);
+				files = await this.filesService.getFiles(user.id, '', query['path'] || null);
 				break;
 		}
-		console.log(files);
+
+		//console.log(files);
 		
 		return files;
 	}
@@ -83,8 +85,12 @@ export class FilesController {
 			response.setHeader('content-type', file['type']);
 			return response.send(uncompressed_buffer);
 		}
+
+		console.log('start');
 		
-		let archive = archiver('zip');
+		let archive = archiver('zip', {
+			zlib: { level: 0 }
+		});
 		const converter = new Writable();
 		const buffs = [];
 		
@@ -97,33 +103,37 @@ export class FilesController {
 		}
 	  
 		converter.on('finish', () => {
+			console.log('finish');
 			return response.send(Buffer.concat(buffs));
 		})
 
 		archive.pipe(converter);
 		
 		for (const file_hash of query['file']) {
-			const file_data = await this.filesService.getFileFromId(file_hash)
-			const path = this.filesService.getUrl(user.id, file_hash)
+			const file_data = await this.filesService.getFileFromId(file_hash);
+			const path = this.filesService.getUrl(user.id, file_hash);
+			console.log('read file');
 			const compressed_buffer = readFileSync(path);
+			console.log('unzipping file');
 			const uncompressed_buffer = unzipSync(compressed_buffer);
+			console.log('append to zip file');
 			archive.append(uncompressed_buffer, {name: `${file_data['name']}.${file_data['extension']}` });
 		}
 		
-		archive.finalize();
+		console.log('finalize');
+		await archive.finalize(); 
+		console.log('finish finalize');
 	}
 
 	@Post('/delete')
 	async deleteFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
 		await this.authService.fromBaerer(request)
-		console.log(body);
 		response.status(200).send({ success: true });
 
 		for (const file_hash of body['files']) {
-			console.log(file_hash);
+
 			const file = await this.filesService.getFileFromId(file_hash)
-			console.log(file);
-			
+
 			if (file === null) {
 				continue;
 			}
@@ -132,27 +142,35 @@ export class FilesController {
 			await this.filesService.delete(file);
 		}
 
-		return true;
+		response.status(200).send({ success: true });
 	}
 
 	@Post('/restore')
 	async restoreFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
 		await this.authService.fromBaerer(request)
-		console.log(body);
 		response.status(200).send({ success: true });
 
 		for (const file_hash of body['files']) {
-			//console.log(file_hash);
 			const file = await this.recyclebinService.getFileFromId(file_hash)
-			console.log(file);
 			
 			if (file === null) {
 				continue;
 			}
+
 			await this.filesService.createFile(file);
 			await this.recyclebinService.delete(file);
 		}
 
-		return true;
+		response.status(200).send({ success: true });
+	}
+
+	@Post('/create-folder')
+	async createFilder(@Req() request: Request, @Res() response: Response, @Query() query: Array<string>): Promise<any> {
+		const user = await this.authService.fromBaerer(request)
+
+		console.log(query);
+
+		const hash = await this.filesService.createFolder(query['name'], query['path'] || null, user.id, null);
+		return response.status(200).send({ success: true });
 	}
 }

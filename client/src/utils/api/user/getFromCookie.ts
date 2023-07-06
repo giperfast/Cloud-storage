@@ -1,3 +1,4 @@
+'use server'
 import 'server-only'
 import { cookies } from 'next/headers';
 import { cache } from 'react';
@@ -14,7 +15,7 @@ export const getUserFromCookie = async (): Promise<IUser|null>  => {
     
     const request = await fetch(`http://localhost:4000/auth?session=${session}`, {
         method: "GET",
-        next: { revalidate: 60 },
+        next: { revalidate: 60, tags: ['user'] },
     }).catch((error) => {
         console.log(error);
     });
@@ -23,5 +24,5 @@ export const getUserFromCookie = async (): Promise<IUser|null>  => {
         return null;
     }
 
-    return await request.json();
+    return await request?.json();
 }

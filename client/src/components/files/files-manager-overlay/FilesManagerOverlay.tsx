@@ -6,7 +6,7 @@ import { removeUploadFiles, selectUploadFiles } from '@/redux/slices/uploadFiles
 import { removeDownloadFiles, selectDownloadFiles } from '@/redux/slices/downloadFiles';
 import { generateShortName } from '@/utils/files/files';
 import { format } from 'util';
-import { Icon } from '@/components/icon/Icon';
+import { Icon } from '@/components/UI/icon/Icon';
 
 function FilesManager({files, title, clearFn}) {
     const dispatch = useAppDispatch();

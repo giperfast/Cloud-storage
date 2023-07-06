@@ -6,18 +6,19 @@ import { selectFiles } from '@/redux/slices/files';
 import { useAppSelector } from '@/redux/hooks';
 import { DeleteButton } from '@/components/buttons/delete-button/DeleteButton';
 import { DownloadButton } from '@/components/buttons/download-button/DownloadButton';
+import { CreateFolderButton } from '@/components/buttons/create-folder-button/CreateFolderButton';
 
 function FileButtons() {
     const contextFile = useAppSelector(selectFiles);
     
     return (
         <>
-            <DownloadButton files={contextFile}>
+            <DownloadButton>
                 <button className={styles.button}>Download</button>
             </DownloadButton>
             <button className={styles.button}>Share</button>
             <button className={styles.button}>Rename</button>
-            <DeleteButton files={contextFile}>
+            <DeleteButton>
                 <button className={styles.button}>Delete</button>
             </DeleteButton>
             <button className={styles.button}>About</button>
@@ -31,7 +32,9 @@ function ContainerButtons() {
             <UploadButton isActive={true}>
                 <button className={styles.button}>Upload</button>
             </UploadButton>
-            <button className={styles.button}>Create folder</button>
+            <CreateFolderButton>
+                <button className={styles.button}>Create folder</button>
+            </CreateFolderButton>
         </>
     )
 }
@@ -53,18 +56,22 @@ const GlobalButtons = memo(() => {
     const contextMenuHandler = useCallback((e) => {
         const target = e.target;
 
+        if (target.closest('#modal')) {
+            return false;
+        }
+
         if (target.closest('.fileWrapper')) {
             e.preventDefault();
             setType('file')
             setActive(true);
-            return true
+            return true;
         }
 
         if (target.closest('#files')) {
             e.preventDefault();
             setType('container')
             setActive(true);
-            return true
+            return true;
         }
 
         setActive(false);

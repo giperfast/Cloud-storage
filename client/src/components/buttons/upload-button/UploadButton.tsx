@@ -4,6 +4,7 @@ import { createRef } from "react";
 import { useRouter } from 'next/navigation';
 import { uploadFile } from '@/redux/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useCurrentPath } from '@/app/hooks/useCurrentPath';
 
 export interface ISidebarUploadFileButtonProps {
     children: any,
@@ -14,6 +15,7 @@ function UploadButton({children, isActive}: ISidebarUploadFileButtonProps) {
     const router = useRouter();
     const file_input = createRef<HTMLInputElement>();
     const dispatch = useAppDispatch();
+    const path = useCurrentPath();
 
     const uploadFiles = (e: React.MouseEvent) => {
         if (isActive === false) {
@@ -30,14 +32,15 @@ function UploadButton({children, isActive}: ISidebarUploadFileButtonProps) {
             return false;
         }
         const files = e.target.files;
-
+        console.log(files);
+        
         if (!files) {
             return false;
         }
 
         for (let i = 0; i < files.length; i++) {
             const file: File | null = files[i];
-            dispatch(uploadFile(file)).then(() => {
+            dispatch(uploadFile({file, path})).then(() => {
                 router.refresh();
             });
         }

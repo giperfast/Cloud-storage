@@ -16,7 +16,10 @@ export const userLogin = async (dto: loginDTO): Promise<IResult> => {
 	const response = await fetch('http://localhost:4000/user/login', {
         method: "POST",
 		body: form,
-    });
+    }).catch((error) => {
+		console.log(error);
+		return result(false, error);
+	});
 
 	if (!response) {
 		return result(false, 'Internal server error');

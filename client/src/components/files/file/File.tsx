@@ -1,13 +1,15 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useRef, useEffect, useCallback, useState } from 'react';
 import styles from './File.module.css';
 import Image from 'next/image';
-import { generateShortName } from '@/utils/files/files';
+import { generateShortName, generateFullName } from '@/utils/files/files';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { removeFile, removeFiles, addFile, setFiles } from '@/redux/slices/files';
 import { IFile } from '@/types/file';
 import { convertUnixToDays } from '@/utils/common/date';
+
+import { useRouter } from 'next/navigation'
 
 export interface IFileProps {
     data: IFile,
@@ -16,12 +18,33 @@ export interface IFileProps {
 
 const File = ({data, selected = false}: IFileProps) => {
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
     const clickHandle = (e: any) => {
 
+        if (data.type !== 'folder') {
+            clickFile(e);
+            return false;
+        }
+
+        if (e.detail === 1) {
+            clickFile(e);
+        } else if (e.detail === 2) {
+            dispatch(removeFiles());
+            console.log(data.path, data.name);
+            
+            if (data.path === null) {
+                return router.push(`cloud/${data.name}`);
+            }
+
+            router.push(`cloud/${data.path}/${data.name}`);
+        }
+    }
+
+    const clickFile = (e) => {
         if (e.shiftKey) {
             dispatch(addFile(data));
-            return;
+            return true;
         }
 
         if (!e.ctrlKey) {
@@ -52,11 +75,9 @@ const File = ({data, selected = false}: IFileProps) => {
     }, [selected])
 
     const selectedClass = selected ? styles.selected : '';
-    const fileTypeClass = data.expires ? 'inRecyclebin' : '';
-    const fullName = `${data.name}.${data.extension}`;
-    
+
     return (
-        <div className={styles.file + ' ' + fileTypeClass + ' ' + selectedClass} onClick={clickHandle} onContextMenu={contextMenuHandle} index={data.index}>
+        <div className={styles.file + ' ' + selectedClass} onClick={clickHandle} onContextMenu={contextMenuHandle} index={data.index}>
             
             <div className={styles.image_wrapper}>
                 <Image src={getImage(data.type)} width={80} height={80} alt="unknown file"/>
@@ -65,14 +86,17 @@ const File = ({data, selected = false}: IFileProps) => {
                     : ''
                 }
             </div>
-            <p className={styles.name} title={fullName}>{generateShortName(data.name, data.extension)}</p>  
+            <p className={styles.name} title={generateFullName(data.name, data.extension)}>{generateShortName(data.name, data.extension)}</p>  
         </div>
     )
 }
 
 function getImage(type: string) {
     let result = ''
-    switch (type) {
+    switch (type.split('/')[0]) {
+        case 'folder':
+            result = 'folder';
+            break;
         case 'text':
             result = 'text';
             break;

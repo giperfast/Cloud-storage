@@ -1,0 +1,52 @@
+.container
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    padding-top: 10%;
+}
+
+.block
+{
+    box-shadow: 0 10px 20px 0 rgba(0,0,0,.2);
+    height: min-content;
+    display: block;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.header
+{
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    background: #336fee;
+    color: #FFFFFF;
+}
+
+.body
+{
+    padding: 20px;
+}
+
+.close
+{
+    cursor: pointer;
+}
+
+.background
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #00000036;
+    z-index: -1;
+}

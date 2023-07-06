@@ -3,8 +3,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios';
 import { parseCookies } from 'nookies'
 
-export const uploadFile = createAsyncThunk('uploadFiles/upload', async function(file, {dispatch, getState}) {
 
+export const uploadFile = createAsyncThunk('uploadFiles/upload', async function({file, path=''}:{file:File, path:string}, {dispatch, getState}) {
     if (file === null) {
         return false;
     }
@@ -18,15 +18,13 @@ export const uploadFile = createAsyncThunk('uploadFiles/upload', async function(
 
     const state = getState();
     const stateFiles = selectUploadFiles(state);
-
-    //const file_id = stateFiles.length;
     const id = stateFiles.length !== 0 ? stateFiles.at(-1).id + 1 : 0 ;
-    dispatch(setFiles([...stateFiles, {id: id, name: file.name, extension: file['extension'], progress: 0}]));
+    dispatch(setFiles([...stateFiles, {id: id, name: file.name, progress: 0}]));
 
     let data = new FormData();
     data.append('file', file, file.name);
 
-    await axios.post('http://localhost:4000/files/upload', data, {
+    await axios.post(`http://46.146.194.137:4000/files/upload?path=${path}`, data, {
         headers: {
             'Accept': 'application/json',
             'Authorization': `bearer ${session}`

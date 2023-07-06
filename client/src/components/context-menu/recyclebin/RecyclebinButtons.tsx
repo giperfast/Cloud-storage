@@ -1,11 +1,11 @@
 'use client'
 import { useEffect, memo, useCallback, useState } from 'react';
 import styles from '../ContextMenu.module.css';
-import { UploadButton } from '../../buttons/upload-button/UploadButton';
+import { UploadButton } from '@/components/buttons/upload-button/UploadButton';
 import { selectFiles } from '@/redux/slices/files';
 import { useAppSelector } from '@/redux/hooks';
-import { DeleteButton } from '../../buttons/delete-button/DeleteButton';
-import { RestoreButton } from '../../buttons/restore-button/RestoreButton';
+import { DeleteButton } from '@/components/buttons/delete-button/DeleteButton';
+import { RestoreButton } from '@/components/buttons/restore-button/RestoreButton';
 
 function FileButtons() {
     const contextFile = useAppSelector(selectFiles);
@@ -49,6 +49,10 @@ const RecyclebinButtons = memo(() => {
 
     const contextMenuHandler = useCallback((e) => {
         const target = e.target;
+
+        if (target.closest('#modal')) {
+            return false;
+        }
 
         if (target.closest('.fileWrapper')) {
             e.preventDefault();

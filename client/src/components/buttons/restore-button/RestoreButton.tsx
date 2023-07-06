@@ -1,9 +1,6 @@
 'use client'
 import styles from './RestoreButton.module.css';
-import { createRef } from "react";
 import { useRouter } from 'next/navigation';
-import { uploadFile } from '@/redux/slices/uploadFiles';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { restoreFiles } from '@/utils/api/files/restore';
 import { IFile } from '@/types/file';
 
@@ -20,6 +17,20 @@ function RestoreButton({children, files}: IDeleteFilesButtonProps) {
         if (!files) {
             return false;
         }
+
+        const file_elements = document.querySelectorAll('.fileWrapper');
+
+        files.map((file:IFile) => {
+            console.log(file);
+            
+            Array.from(file_elements).map((element:Element) => {
+                const index = Number(element.firstElementChild?.getAttribute('index'));
+                if (file.index === index) {
+                    element.style.display = "none";
+                    return false;
+                }
+            })
+        })
 
         await restoreFiles(files);
         router.refresh();
