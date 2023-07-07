@@ -32,7 +32,7 @@ function UploadButton({children, isActive}: ISidebarUploadFileButtonProps) {
             return false;
         }
         const files = e.target.files;
-        console.log(files);
+        //console.log(files);
         
         if (!files) {
             return false;

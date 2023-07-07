@@ -18,10 +18,10 @@ function RestoreButton({children, files}: IDeleteFilesButtonProps) {
             return false;
         }
 
-        const file_elements = document.querySelectorAll('.fileWrapper');
+        const file_elements = document.querySelectorAll('.file-wrapper');
 
         files.map((file:IFile) => {
-            console.log(file);
+           //console.log(file);
             
             Array.from(file_elements).map((element:Element) => {
                 const index = Number(element.firstElementChild?.getAttribute('index'));

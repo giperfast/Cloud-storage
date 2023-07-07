@@ -13,54 +13,6 @@ const DragDropArea = ({isActive}) => {
     const path = useCurrentPath();
     const [drag, setDrag] = useState(false);
 
-    /*let counter = 0;
-
-    const dragStartHandler = useCallback((e) => {
-        e.preventDefault();
-        setDrag(true);
-        counter++;
-    }, [])
-
-    const dragLeaveHandler = useCallback((e) => {
-        e.preventDefault();
-        counter--;
-        if (counter !== 0) {
-            return false;
-        }
-        setDrag(false);
-    }, [])
-
-    const dragOverHandler = useCallback((e) => {
-        e.preventDefault();
-    }, [])
-
-    const dropHandler = useCallback((e) => {
-        e.preventDefault();
-        setDrag(false);
-        counter = 0;
-
-        if (isActive === false) {
-            return false;
-        }
-
-        const files = e.dataTransfer.files;
-
-        if (!files) {
-            return false;
-        }
-        
-        console.log(files);
-        
-
-        for (let i = 0; i < files.length; i++) {
-            const file: File | null = files[i];
-            dispatch(uploadFile({file, path})).then(() => {
-                router.refresh();
-            });
-        }
-    }, [])*/
-
-
     useEffect(() => {
        let counter = 0;
 
@@ -98,7 +50,7 @@ const DragDropArea = ({isActive}) => {
                 return false;
             }
             
-            console.log(files);
+            //console.log(files);
             
 
             for (let i = 0; i < files.length; i++) {

@@ -39,7 +39,7 @@ function ContainerButtons() {
     )
 }
 
-const GlobalButtons = memo(() => {
+const GlobalButtons = () => {
 
     const [active, setActive] = useState(false);
     const [type, setType] = useState('');
@@ -60,7 +60,7 @@ const GlobalButtons = memo(() => {
             return false;
         }
 
-        if (target.closest('.fileWrapper')) {
+        if (target.closest('.file-wrapper')) {
             e.preventDefault();
             setType('file')
             setActive(true);
@@ -89,6 +89,6 @@ const GlobalButtons = memo(() => {
     }
 
     return <>{getButtonsFromType(type)}</>
-})
+}
 
 export { GlobalButtons };

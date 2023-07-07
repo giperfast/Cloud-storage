@@ -1,4 +1,4 @@
-'use client'
+'use server'
 import { IFile } from '@/types/file';
 import axios from 'axios';
 import { parseCookies } from 'nookies'

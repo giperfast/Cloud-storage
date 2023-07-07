@@ -2,7 +2,7 @@
 import { useEffect, memo, useCallback, useState, Children } from 'react';
 import styles from './ContextMenu.module.css';
 
-const ContextMenu = memo(({children}: {children: React.ReactNode}) => {
+const ContextMenu = ({children}: {children: React.ReactNode}) => {
     const [active, setActive] = useState(true);
     const [position, setPosition] = useState({x: 0, y: 0});
     
@@ -45,6 +45,6 @@ const ContextMenu = memo(({children}: {children: React.ReactNode}) => {
             {children}
         </div>
     )
-})
+}
 
 export { ContextMenu };

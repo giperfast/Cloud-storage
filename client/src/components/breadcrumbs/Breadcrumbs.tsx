@@ -15,14 +15,14 @@ function Breadcrumbs({path}) {
             <span className={styles.crumbs}>
             {
                 routes.map((route, index) => {
-                    const route_array = routes.slice(0, index+1);
+                    const route_array = routes.slice(0, index + 1);
                     const route_string = route_array.join('/');
                     
-                    return <span className={styles.route} onClick={() => router.push(route_string)} key={index}>{route}</span>
+                    return <span className={styles.route} onClick={() => router.push(route_string)} key={index}>{decodeURIComponent(route)}</span>
                 })
             }
             </span>
-            <span className={styles.current}>{path.at(-1)}</span>
+            <span className={styles.current}>{decodeURIComponent(path.at(-1))}</span>
 		</span>
     );
 }

@@ -143,7 +143,7 @@ export class FilesService {
 			mkdirSync(server_path, { recursive: true });
 		}
 
-		return `${path}/${name}`;
+		return `${server_path}/${name}`;
 	}
 
 	getPath(): string {

@@ -2,15 +2,17 @@
 import { Children, useEffect, isValidElement, cloneElement, useCallback, useState } from 'react';
 import styles from './FilesContainer.module.css';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { addFile, removeFiles, selectContextFile, selectFiles, setFiles } from '@/redux/slices/files';
+import { addFile, removeFiles, removeUnknownFiles, selectFiles, selectUnknownFiles, setFiles } from '@/redux/slices/files';
 import { IFile } from '@/types/file';
 
 function FilesContainer({children}: any) {
     const files = useAppSelector(selectFiles);
+    const files_indexes = useAppSelector(selectUnknownFiles);
+    //const files_indexes = [];
     const dispatch = useAppDispatch();
     const [isShift, setIsShift] = useState(false);
 
-    console.log(files);
+    //console.log(files);
     
 
     const isSelect = (file_id: string): boolean => {
@@ -20,7 +22,7 @@ function FilesContainer({children}: any) {
     const windowClickHandler = useCallback((e: any) => {
 
         if (e.shiftKey) {
-            if (!e.target.closest(`.fileWrapper`)) {
+            if (!e.target.closest(`.file-wrapper`)) {
                 return false;
             }
 
@@ -44,7 +46,7 @@ function FilesContainer({children}: any) {
             return false;
         }
 
-        if (e.target.closest(`.fileWrapper`)) {
+        if (e.target.closest(`.file-wrapper`)) {
             return false;
         }
 
@@ -55,7 +57,7 @@ function FilesContainer({children}: any) {
         if (files.length === 0) {
             return;
         }
-
+        
         dispatch(removeFiles());
     }, [files]);
 
@@ -71,8 +73,12 @@ function FilesContainer({children}: any) {
             const props: any = child.props;
             const index: number = props.data?.index;
             const file_id: string = props.data?.file_id;
-
+            
             let selected = isSelect(file_id);
+
+            if (files_indexes.includes(index)) {
+                selected = true;
+            }
 
             if (isShift === true && selected === false) {
                 if (index > files.at(0)?.index && index < files.at(-1)?.index) {
@@ -93,7 +99,7 @@ function FilesContainer({children}: any) {
         <div className={styles.files}>
         {
             Children.map(newChildren, child =>
-                <div className="fileWrapper">{child}</div>
+                <div className="file-wrapper">{child}</div>
             )
         }
         </div>

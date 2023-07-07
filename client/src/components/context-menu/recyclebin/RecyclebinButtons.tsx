@@ -33,7 +33,7 @@ function ContainerButtons() {
     )
 }
 
-const RecyclebinButtons = memo(() => {
+const RecyclebinButtons = () => {
 
     const [active, setActive] = useState(false);
     const [type, setType] = useState('');
@@ -54,7 +54,7 @@ const RecyclebinButtons = memo(() => {
             return false;
         }
 
-        if (target.closest('.fileWrapper')) {
+        if (target.closest('.file-wrapper')) {
             e.preventDefault();
             setType('file')
             setActive(true);
@@ -83,6 +83,6 @@ const RecyclebinButtons = memo(() => {
     }
 
     return <>{getButtonsFromType(type)}</>
-})
+}
 
 export { RecyclebinButtons };

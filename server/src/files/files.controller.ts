@@ -79,6 +79,8 @@ export class FilesController {
 			const file_hash = query['file'];
 			const file = await this.filesService.getFileFromId(file_hash);
 			const path = this.filesService.getUrl(user.id, file['file_id']);
+			console.log(path);
+			
 			const compressed_buffer = readFileSync(path);
 			const uncompressed_buffer = unzipSync(compressed_buffer);
 			//response.attachment('test.zip');

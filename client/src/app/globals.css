@@ -87,3 +87,13 @@ main
 {
 	pointer-events: none;
 }
+
+.no-user-select
+{
+	user-select: none;
+}
+
+.test 
+{
+	background-color: red !important;
+}

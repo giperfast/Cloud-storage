@@ -9,11 +9,6 @@ export const createFolder = async (name:string, path:string = []) => {
     if (!session) {
         return false;
     }
-    
-   /* var data = new URLSearchParams();
-    for (const folder of path) {
-        data.append('folder[]', folder);
-    }*/
 
     await fetch(`http://localhost:4000/files/create-folder?name=${name}&path=${path}`, {
         method: "POST",

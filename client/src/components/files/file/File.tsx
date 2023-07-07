@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { generateShortName, generateFullName } from '@/utils/files/files';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { removeFile, removeFiles, addFile, setFiles } from '@/redux/slices/files';
+import { removeFile, removeFiles, addFile, setFiles, removeUnknownFile } from '@/redux/slices/files';
 import { IFile } from '@/types/file';
 import { convertUnixToDays } from '@/utils/common/date';
 
@@ -31,8 +31,7 @@ const File = ({data, selected = false}: IFileProps) => {
             clickFile(e);
         } else if (e.detail === 2) {
             dispatch(removeFiles());
-            console.log(data.path, data.name);
-            
+
             if (data.path === null) {
                 return router.push(`cloud/${data.name}`);
             }
@@ -64,7 +63,7 @@ const File = ({data, selected = false}: IFileProps) => {
             return false;
         }
 
-        dispatch(setFiles(data));
+        //dispatch(setFiles(data));
     }
 
 
@@ -72,6 +71,8 @@ const File = ({data, selected = false}: IFileProps) => {
         if (selected === true) {
             dispatch(addFile(data));
         }
+
+        dispatch(removeUnknownFile(data.index));
     }, [selected])
 
     const selectedClass = selected ? styles.selected : '';
@@ -86,6 +87,7 @@ const File = ({data, selected = false}: IFileProps) => {
                     : ''
                 }
             </div>
+            
             <p className={styles.name} title={generateFullName(data.name, data.extension)}>{generateShortName(data.name, data.extension)}</p>  
         </div>
     )
