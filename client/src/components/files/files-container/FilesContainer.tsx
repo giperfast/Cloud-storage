@@ -1,28 +1,24 @@
-'use client'
+'use client';
 import { Children, useEffect, isValidElement, cloneElement, useCallback, useState } from 'react';
 import styles from './FilesContainer.module.css';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { addFile, removeFiles, removeUnknownFiles, selectFiles, selectUnknownFiles, setFiles } from '@/redux/slices/files';
+import { removeFiles, selectFiles, selectUnknownFiles, setFiles } from '@/redux/slices/files';
 import { IFile } from '@/types/file';
 
 function FilesContainer({children}: any) {
+    const dispatch = useAppDispatch();
     const files = useAppSelector(selectFiles);
     const files_indexes = useAppSelector(selectUnknownFiles);
-    //const files_indexes = [];
-    const dispatch = useAppDispatch();
     const [isShift, setIsShift] = useState(false);
-
-    //console.log(files);
-    
 
     const isSelect = (file_id: string): boolean => {
         return files.findIndex((file: IFile) => file.file_id == file_id) !== -1;
-    }
+    };
     
     const windowClickHandler = useCallback((e: any) => {
 
         if (e.shiftKey) {
-            if (!e.target.closest(`.file-wrapper`)) {
+            if (!e.target.closest('.file-wrapper')) {
                 return false;
             }
 
@@ -42,15 +38,15 @@ function FilesContainer({children}: any) {
             return false;
         }
         
-        if (!e.target.closest('#file_overlay_close') && e.target.closest(`#file_overlay`)) {
+        if (!e.target.closest('#file_overlay_close') && e.target.closest('#file_overlay')) {
             return false;
         }
 
-        if (e.target.closest(`.file-wrapper`)) {
+        if (e.target.closest('.file-wrapper')) {
             return false;
         }
 
-        if (e.target.closest(`#context_menu`)) {
+        if (e.target.closest('#context_menu')) {
             return false;
         }
 
@@ -64,9 +60,9 @@ function FilesContainer({children}: any) {
     useEffect(() => {
         window.addEventListener('mouseup', windowClickHandler);
         return () => {
-            window.removeEventListener("mouseup", windowClickHandler);
+            window.removeEventListener('mouseup', windowClickHandler);
         };
-    }, [files])
+    }, [files]);
 
     const newChildren = Children.map(children, child => {
         if (isValidElement(child)) {
@@ -99,11 +95,17 @@ function FilesContainer({children}: any) {
         <div className={styles.files}>
         {
             Children.map(newChildren, child =>
-                <div className="file-wrapper">{child}</div>
+                <>{child}</>
+            )
+        }
+
+        {
+            [...Array(8)].map((index) =>
+                <div className="empty-file-wrapper" key={Math.floor(Math.random() * 80000)}></div>
             )
         }
         </div>
-    )
+    );
 }
 
 export { FilesContainer };

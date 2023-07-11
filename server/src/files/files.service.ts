@@ -22,8 +22,9 @@ export class FilesService {
 				size: this.getSize(file_data),
 				type: this.getType(file_data),
 				path: path,
-				childId: null,
-				parentId: null,
+				date: Math.floor(Date.now()/1000),
+				//childId: null,
+				//parentId: null,
 				userId: user_id 
 			}
 		})
@@ -40,8 +41,8 @@ export class FilesService {
 				size: file_data.size,
 				type: file_data.type,
 				path: file_data.path,
-				childId: null,
-				parentId: null,
+				//childId: null,
+				//parentId: null,
 				userId: file_data.userId
 			}
 		})
@@ -59,8 +60,8 @@ export class FilesService {
 				size: 0,
 				type: 'folder',
 				path: path,
-				childId: null,
-				parentId: parent,
+				//childId: null,
+				//parentId: parent,
 				userId: user_id
 			}
 		})
@@ -69,32 +70,73 @@ export class FilesService {
 	}
 
 	async getFiles(userId, type='', path=null): Promise<object> {
-		console.log(type, path);
+		const folders = await this.databaseService.file.findMany({
+			where: {
+				userId: userId,
+				type: {
+					startsWith: 'folder'
+				},
+				path: path
+			}
+		})
+
 		const files = await this.databaseService.file.findMany({
 			where: {
 				userId: userId,
 				type: {
-					startsWith: type
+					startsWith: type,
+					not: {
+						contains: 'folder',
+					}
 				},
 				path: path
 			}
 		})
 		
-		return files;
+		return [...folders, ...files];
 	}
 
-	async getPhotos(userId): Promise<object> {
+	async getRecent(userId): Promise<object> {
 		const files = await this.databaseService.file.findMany({
 			where: {
 				userId: userId,
 				type: {
+					not: {
+						contains: 'folder',
+					}
+				},
+			}
+		});
+		
+		return files;
+	}
+
+	async getImages(userId): Promise<object> {
+		const images = await this.databaseService.file.findMany({
+			where: {
+				userId: userId,
+				type: {
 					startsWith: 'image'
-				}
+				},
 			}
 		})
 
-		return files;
+		return images;
 	}
+
+	/*async getFolders(userId, path=null): Promise<object> {
+		const folders = await this.databaseService.file.findMany({
+			where: {
+				userId: userId,
+				type: {
+					startsWith: 'folder'
+				},
+				path: path
+			}
+		})
+
+		return folders;
+	}*/
 
 	async delete(file_data): Promise<boolean> {
 		await this.databaseService.file.delete({

@@ -1,17 +1,21 @@
 'use client'
 
 import { parseCookies } from 'nookies'
+import { result } from '../result/result'
 
 export const downloadFiles = async (files: any) => {
     const cookies = parseCookies()
     const session = cookies['cloud_session']
 
     if (!session) {
-        return null;
+        return result(false, 'Session error, reload page');
+    }
+
+    if (files.length === 0) {
+        return result(false, 'Files not found');
     }
 
     const params = new URLSearchParams();
-
     for (const file of files) {
       params.append('file', file.file_id);
     }

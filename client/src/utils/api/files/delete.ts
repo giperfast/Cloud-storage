@@ -1,20 +1,19 @@
-'use server'
+'use server';
 import { IFile } from '@/types/file';
 import axios from 'axios';
-//import { parseCookies } from 'nookies'
 import { cookies } from 'next/headers';
+import { result } from '../result/result';
 
 export const deleteFiles = async (files: Array<IFile>) => {
     const cookieStore = cookies();
     const session = cookieStore.get('cloud_session')?.value
-    console.log(session);
-    
+
     if (!session) {
-        return false;
+        return result(false, 'Session error, reload page');
     }
     
     if (files.length === 0) {
-        return false;
+        return result(false, 'Files not found');
     }
     
     var data = new URLSearchParams();

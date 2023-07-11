@@ -1,5 +1,5 @@
-'use client'
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+'use client';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type User = {
     username: string,
@@ -12,7 +12,7 @@ export interface UserState {
 
 const initialState: UserState = {
     data: null
-}
+};
 
 export const userSlice = createSlice({
     name: 'user',
@@ -22,10 +22,10 @@ export const userSlice = createSlice({
             state.data = action.payload;
         },
     },
-})
+});
 
-export const { setUserData } = userSlice.actions
+export const { setUserData } = userSlice.actions;
 
-export const selectUser = (state: AppState) => state.user.data
+export const selectUser = (state: any) => state.user.data;
 
 export const UserReduser = userSlice.reducer;

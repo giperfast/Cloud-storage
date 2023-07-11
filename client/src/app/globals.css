@@ -21,47 +21,47 @@ a
 
 .App
 {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
-  z-index: 1;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	width: 100%;
+	z-index: 1;
 }
 
 main
 {
-  display: flex;
-  flex-direction: row;
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  flex-grow: 1;
-  gap: 20px;
-  padding: 25px 0px;
+	display: flex;
+	flex-direction: row;
+	max-width: 1200px;
+	width: 100%;
+	margin: 0 auto;
+	flex-grow: 1;
+	gap: 20px;
+	padding: 25px 0px;
 }
 
 .background-cloud svg
 {
-  color: #e9e9e942;
-  position: fixed;
-  height: 80%;
-  z-index: 0;
-  right: 0;
-  bottom: 0;
+	color: #e9e9e942;
+	position: fixed;
+	height: 80%;
+	z-index: 0;
+	right: 0;
+	bottom: 0;
 }
 
 .hidden
 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  line-height: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	display: none;
+	opacity: 0;
+	visibility: hidden;
+	line-height: 0;
 }
 
 .page-sidebar
@@ -91,6 +91,19 @@ main
 .no-user-select
 {
 	user-select: none;
+}
+
+.file-wrapper
+{
+  	position: relative;
+}
+
+.empty-file-wrapper
+{
+	width: 100px;
+	height: 0;
+	padding: 0;
+	margin: 0;
 }
 
 .test 

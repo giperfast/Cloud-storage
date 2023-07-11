@@ -1,26 +1,24 @@
-'use server'
+'use server';
 import { cookies } from 'next/headers';
 import { IFile } from '@/types/file';
-import axios from 'axios';
+import { IResult, result } from '../result/result';
 
-export const getFiles = async (type: string = 'all', path:string = ''): Promise<Array<IFile>> => {
+export const getFiles = async (type: string = 'all', path:string = ''): Promise<Array<IFile>|IResult> => {
     const cookieStore = cookies();
-    const session = cookieStore.get('cloud_session')?.value
+    const session = cookieStore.get('cloud_session')?.value;
     
     if (!session) {
-        return [];
+        return result(false, 'Session error, reload page');
     }
 
-    console.log(path);
-
-    /*var data = new URLSearchParams();
+    var data = new URLSearchParams();
     data.append('type', type);
-    for (const folder of path) {
-        data.append('folder[]', folder);
-    }*/
+    if (path !== '') {
+        data.append('path', path);
+    }
 
-    const request = await fetch(`http://localhost:4000/files?type=${type}&path=${path}`, {
-        method: "GET",
+    const request = await fetch(`http://localhost:4000/files?${data}`, {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Authorization': `bearer ${session}`,
@@ -31,7 +29,7 @@ export const getFiles = async (type: string = 'all', path:string = ''): Promise<
     });
 
     if (request?.status !== 200) {
-        return [];
+        return result(false, 'Internal server error');
     }
 
     return await request.json();

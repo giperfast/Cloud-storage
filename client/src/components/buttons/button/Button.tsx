@@ -1,9 +1,16 @@
-'use client'
+'use client';
 import Link from 'next/link';
 import styles from './Button.module.css';
 import { Icon } from '@/components/UI/icon/Icon';
 
-function Button({children, href = '', icon = '', theme = '', ...attrs}:{children:string|React.ReactNode, href:string, icon:string, theme:string}) {
+interface IButtonProps {
+    children:string|React.ReactNode,
+    href?:string,
+    icon?:string,
+    theme?:string,
+}
+
+function Button({children, href = '', icon = '', theme = '', ...attrs}:IButtonProps) {
 
     const theme_class = styles[theme] === undefined ? styles.transparent : styles[theme];
 
@@ -31,7 +38,7 @@ function Button({children, href = '', icon = '', theme = '', ...attrs}:{children
                 {children}
             </Link>
         </>
-    )
+    );
 }
 
 export { Button };

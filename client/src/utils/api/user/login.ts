@@ -14,7 +14,7 @@ export const userLogin = async (dto: loginDTO): Promise<IResult> => {
 	form.append('password', dto.password);
 
 	const response = await fetch('http://localhost:4000/user/login', {
-        method: "POST",
+        method: 'POST',
 		body: form,
     }).catch((error) => {
 		console.log(error);

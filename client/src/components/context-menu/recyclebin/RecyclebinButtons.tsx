@@ -1,25 +1,21 @@
-'use client'
+'use client';
 import { useEffect, memo, useCallback, useState } from 'react';
 import styles from '../ContextMenu.module.css';
 import { UploadButton } from '@/components/buttons/upload-button/UploadButton';
-import { selectFiles } from '@/redux/slices/files';
-import { useAppSelector } from '@/redux/hooks';
 import { DeleteButton } from '@/components/buttons/delete-button/DeleteButton';
 import { RestoreButton } from '@/components/buttons/restore-button/RestoreButton';
 
 function FileButtons() {
-    const contextFile = useAppSelector(selectFiles);
-
     return (
         <>
-            <RestoreButton files={contextFile}>
+            <RestoreButton>
                 <button className={styles.button}>Restore</button>
             </RestoreButton>
-            <DeleteButton files={contextFile}>
+            <DeleteButton>
                 <button className={styles.button}>Delete</button>
             </DeleteButton>
         </>
-    )
+    );
 }
 
 function ContainerButtons() {
@@ -30,11 +26,10 @@ function ContainerButtons() {
             </UploadButton>
             <button className={styles.button}>Restore all</button>
         </>
-    )
+    );
 }
 
 const RecyclebinButtons = () => {
-
     const [active, setActive] = useState(false);
     const [type, setType] = useState('');
 
@@ -45,9 +40,9 @@ const RecyclebinButtons = () => {
             default:
                 return <ContainerButtons/>;
         }
-    }
+    };
 
-    const contextMenuHandler = useCallback((e) => {
+    const contextMenuHandler = useCallback((e: any) => {
         const target = e.target;
 
         if (target.closest('#modal')) {
@@ -56,33 +51,33 @@ const RecyclebinButtons = () => {
 
         if (target.closest('.file-wrapper')) {
             e.preventDefault();
-            setType('file')
+            setType('file');
             setActive(true);
-            return true
+            return true;
         }
 
         if (target.closest('#files')) {
             e.preventDefault();
-            setType('container')
+            setType('container');
             setActive(true);
-            return true
+            return true;
         }
 
         setActive(false);
-    }, [])
+    }, []);
 
     useEffect(() => {
         window.addEventListener('contextmenu', contextMenuHandler);
         return () => {
             window.removeEventListener('contextmenu', contextMenuHandler);
-        }
-    }, [])
+        };
+    }, []);
 
     if (active === false) {
-        return <></>
+        return <></>;
     }
 
-    return <>{getButtonsFromType(type)}</>
+    return <>{getButtonsFromType(type)}</>;
 }
 
 export { RecyclebinButtons };

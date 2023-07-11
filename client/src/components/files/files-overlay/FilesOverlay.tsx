@@ -1,11 +1,12 @@
-'use client'
+'use client';
 import styles from './FilesOverlay.module.css';
-import { DownloadButton } from "@/components/buttons/download-button/DownloadButton";
-import { Button } from "@/components/buttons/button/Button";
-import { generateShortName, generateFullName } from '@/utils/files/files';
+import { DownloadButton } from '@/components/buttons/download-button/DownloadButton';
+import { Button } from '@/components/buttons/button/Button';
+import { generateShortName, generateFullName } from '@/utils/common/files';
 import { Icon } from '@/components/UI/icon/Icon';
 import { useAppSelector } from '@/redux/hooks';
 import { selectFiles } from '@/redux/slices/files';
+import { IFile } from '@/types/file';
 
 const FilesOverlay = () => {
     const files = useAppSelector(selectFiles);
@@ -23,7 +24,7 @@ const FilesOverlay = () => {
 
                         <div className={styles.buttons}>
                             <Button icon="share">Share</Button>
-                            <DownloadButton files={files}>
+                            <DownloadButton>
                                 <Button icon="cloud-download" theme="primary">Download</Button>
                             </DownloadButton>
                             <span className={styles.fileOverlayClose} id="file_overlay_close"><Icon name="times"/></span>
@@ -33,10 +34,10 @@ const FilesOverlay = () => {
             }
             </div>
         </div>
-    )
-}
+    );
+};
 
-function getTitle(files) {
+function getTitle(files: Array<IFile>) {
 
     if (files.length === 1) {
         return (<span title={generateFullName(files[0]?.name, files[0]?.extension)}>

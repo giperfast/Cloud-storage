@@ -1,13 +1,12 @@
-'use client'
+'use client';
 import { useState, useEffect, memo, useCallback } from 'react';
 import styles from './DragDropArea.module.css';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { uploadFile } from '@/redux/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useCurrentPath } from '@/app/hooks/useCurrentPath';
 
-const DragDropArea = ({isActive}) => {
+const DragDropArea = ({isActive}:{isActive:boolean}) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const path = useCurrentPath();
@@ -16,13 +15,13 @@ const DragDropArea = ({isActive}) => {
     useEffect(() => {
        let counter = 0;
 
-        const dragStartHandler = (e) => {
+        const dragStartHandler = (e: any) => {
             e.preventDefault();
             setDrag(true);
             counter++;
         }
 
-        const dragLeaveHandler = (e) => {
+        const dragLeaveHandler = (e: any) => {
             e.preventDefault();
             counter--;
             if (counter !== 0) {
@@ -31,11 +30,11 @@ const DragDropArea = ({isActive}) => {
             setDrag(false);
         }
 
-        const dragOverHandler = (e) => {
+        const dragOverHandler = (e: any) => {
             e.preventDefault();
-        }
+        };
 
-        const dropHandler = async (e) => {
+        const dropHandler = async (e: any) => {
             e.preventDefault();
             setDrag(false);
             counter = 0;
@@ -49,12 +48,14 @@ const DragDropArea = ({isActive}) => {
             if (!files) {
                 return false;
             }
-            
-            //console.log(files);
-            
 
             for (let i = 0; i < files.length; i++) {
                 const file: File | null = files[i];
+
+                if (!file) {
+                    continue;
+                }
+
                 dispatch(uploadFile({file, path})).then(() => {
                     router.refresh();
                 });
@@ -71,34 +72,19 @@ const DragDropArea = ({isActive}) => {
             window.removeEventListener('dragover', dragOverHandler)
             window.removeEventListener('drop', dropHandler)
         };
-    }, [path])
-
-
-    /*useEffect(() => {
-        window.addEventListener('dragenter', dragStartHandler)
-        window.addEventListener('dragleave', dragLeaveHandler)
-        window.addEventListener('dragover', dragOverHandler)
-        window.addEventListener('drop', dropHandler)
-        return () => {
-            window.removeEventListener('dragenter', dragStartHandler)
-            window.removeEventListener('dragleave', dragLeaveHandler)
-            window.removeEventListener('dragover', dragOverHandler)
-            window.removeEventListener('drop', dropHandler)
-        };
-    }, [])*/
-
+    }, [path]);
 
     if (drag === false) {
         return <></>;
     }
 
-    const message = isActive === true ? 'Drop file' : 'Storage is full. Please free up space to upload files'
+    const message = isActive === true ? 'Drop file' : 'Storage is full. Please free up space to upload files';
 
     return (
         <div className={styles.container}>
             <div className={styles.content}>{message}</div>
         </div>
-    )
-}
+    );
+};
 
-export { DragDropArea } 
+export { DragDropArea };

@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './UserCard.module.css';
@@ -11,18 +10,18 @@ function UserCard({user}:{user:IUser}) {
     const [isOpened, setIsOpened] = useState(false);
     
     const clickHandle = (e: any) => {
-        setIsOpened(!isOpened)
-    }
+        setIsOpened(!isOpened);
+    };
 
     useEffect(() => {
         window.addEventListener('mouseup', (e: any) => {
             if (e.target.closest(`.${styles.user_card}`)) {
-                return false
+                return false;
             }
     
             setIsOpened(false);
         });
-    }, [])
+    }, []);
 
     return (
         <div className={styles.user_card} onClick={clickHandle}>
@@ -42,7 +41,7 @@ function UserCard({user}:{user:IUser}) {
             }
             
         </div>
-    )
+    );
 }
 
 export default UserCard;

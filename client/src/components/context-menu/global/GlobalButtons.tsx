@@ -1,16 +1,12 @@
-'use client'
+'use client';
 import { useEffect, memo, useCallback, useState } from 'react';
 import styles from '../ContextMenu.module.css';
 import { UploadButton } from '@/components/buttons/upload-button/UploadButton';
-import { selectFiles } from '@/redux/slices/files';
-import { useAppSelector } from '@/redux/hooks';
 import { DeleteButton } from '@/components/buttons/delete-button/DeleteButton';
 import { DownloadButton } from '@/components/buttons/download-button/DownloadButton';
 import { CreateFolderButton } from '@/components/buttons/create-folder-button/CreateFolderButton';
 
 function FileButtons() {
-    const contextFile = useAppSelector(selectFiles);
-    
     return (
         <>
             <DownloadButton>
@@ -23,7 +19,7 @@ function FileButtons() {
             </DeleteButton>
             <button className={styles.button}>About</button>
         </>
-    )
+    );
 }
 
 function ContainerButtons() {
@@ -36,7 +32,7 @@ function ContainerButtons() {
                 <button className={styles.button}>Create folder</button>
             </CreateFolderButton>
         </>
-    )
+    );
 }
 
 const GlobalButtons = () => {
@@ -51,9 +47,9 @@ const GlobalButtons = () => {
             default:
                 return <ContainerButtons/>;
         }
-    }
+    };
 
-    const contextMenuHandler = useCallback((e) => {
+    const contextMenuHandler = useCallback((e: any) => {
         const target = e.target;
 
         if (target.closest('#modal')) {
@@ -62,33 +58,33 @@ const GlobalButtons = () => {
 
         if (target.closest('.file-wrapper')) {
             e.preventDefault();
-            setType('file')
+            setType('file');
             setActive(true);
             return true;
         }
 
         if (target.closest('#files')) {
             e.preventDefault();
-            setType('container')
+            setType('container');
             setActive(true);
             return true;
         }
 
         setActive(false);
-    }, [])
+    }, []);
 
     useEffect(() => {
         window.addEventListener('contextmenu', contextMenuHandler);
         return () => {
             window.removeEventListener('contextmenu', contextMenuHandler);
-        }
-    }, [])
+        };
+    }, []);
 
     if (active === false) {
-        return <></>
+        return <></>;
     }
 
-    return <>{getButtonsFromType(type)}</>
+    return <>{getButtonsFromType(type)}</>;
 }
 
 export { GlobalButtons };

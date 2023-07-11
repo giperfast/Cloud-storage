@@ -1,4 +1,4 @@
-'use server'
+'use server';
 import { result, IResult } from '../result/result';
 
 export interface registerDTO {
@@ -13,12 +13,12 @@ export const userRegister = async (dto: registerDTO): Promise<IResult> => {
 	form.append('password', dto.password);
 	
 	const response = await fetch('http://localhost:4000/user/create', {
-        method: "POST",
+        method: 'POST',
 		body: form,
     });
 
 	if (!response) {
-		return result(false, 'Internal server error')
+		return result(false, 'Internal server error');
 	}
 
 	return result(true);

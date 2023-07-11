@@ -1,18 +1,20 @@
-'use client'
-import { generateFullName } from '@/utils/files/files';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+'use client';
+import { IFile } from '@/types/file';
+import { generateFullName } from '@/utils/common/files';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { parseCookies } from 'nookies'
-import { IFileData } from '../../components/files/file/File';
+import { parseCookies } from 'nookies';
 
-export const downloadFile = createAsyncThunk('downloadFiles/download', async function(files: Array<IFileData>, {dispatch, getState}) {
+const controller = new AbortController();
+
+export const downloadFile = createAsyncThunk('downloadFiles/download', async function(files: Array<IFile>, {dispatch, getState}) {
     
     if (files === null) {
         return false;
     }
 
-    const cookies = parseCookies()
-    const session = cookies['cloud_session']
+    const cookies = parseCookies();
+    const session = cookies['cloud_session'];
     
     if (!session) {
         return false;
@@ -24,19 +26,33 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
     const id = stateFiles.length !== 0 ? stateFiles.at(-1).id + 1 : 0 ;
 
     if (files.length > 1) {
-        dispatch(setFiles([...stateFiles, {id: id, file_id: '', name: 'files', extension: 'zip', progress: 0}]));
+        dispatch(setFiles([...stateFiles, {
+            id: id,
+            file_id: '',
+            name: 'files',
+            extension: 'zip',
+            progress: 0,
+            status: 'PENDING'
+        }]));
     } else {
-        dispatch(setFiles([...stateFiles, {id: id, file_id: files[0]['file_id'], name: files[0]['name'], extension: files[0]['extension'], progress: 0}]));
+        dispatch(setFiles([...stateFiles, {
+            id: id,
+            file_id: files[0]['file_id'],
+            name: files[0]['name'],
+            extension: files[0]['extension'],
+            progress: 0,
+            status: 'PENDING'
+        }]));
     }
 
-    let query = new URLSearchParams();
+    const query = new URLSearchParams();
 
     for (const file of files) {
         query.append('file', file.file_id);
     }
 
-    let lastNow = Date.now();
-    let lastKBytes = 0;
+    /*let lastNow = Date.now();
+    let lastKBytes = 0;*/
 
     const result = await axios.get(`http://46.146.194.137:4000/files/download?${query}`, {
         responseType: 'arraybuffer',
@@ -45,9 +61,9 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
             'Authorization': `bearer ${session}`
         },
         onDownloadProgress: download => {
-            console.log(download);
+            //console.log(download);
             
-            const now = Date.now();
+            /*const now = Date.now();
             const bytes = download.loaded;
             const kbytes = bytes / 1024;
             const uploadedkBytes = kbytes - lastKBytes;
@@ -55,21 +71,20 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
             const kbps =  elapsed ? uploadedkBytes / elapsed : 0 ;
             lastKBytes = kbytes;
             lastNow = now;
-            console.log(kbps.toFixed(2) + "KB/s");
+            console.log(kbps.toFixed(2) + "KB/s");*/
 
-            let progress = Math.round((100 * download.loaded) / download.total);
+            const progress = Math.round((100 * download.loaded) / download.total);
             dispatch(setDownloadProgress({id, progress}));
         },
+        signal: controller.signal
     });
 
-    console.log(result.headers['content-type']);
-    
     const blob = new Blob([result.data], {
         type: result.headers['content-type'],
     });
 
     const file_url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = file_url;
 
     if (files.length > 1) {
@@ -78,11 +93,6 @@ export const downloadFile = createAsyncThunk('downloadFiles/download', async fun
         link.download = generateFullName(files[0]['name'], files[0]['extension']);
     }
 
-    //link.download = generateFullName(file['name'], file['extension']);
-    /*let filename = result.headers['content-disposition']
-    console.log(filename);*/
-    
-    //link.download = generateFullName('files', 'zip');
     document.body.appendChild(link);
     link.click();
     link.parentNode?.removeChild(link);
@@ -101,28 +111,54 @@ export const downloadFilesSlice = createSlice({
             const id = action.payload.id;
 
             const file = state.files.filter((file) => {
-                return file.id === id
-            })[0]
+                return file.id === id;
+            })[0];
 
             if (file === undefined) {
-                return state
+                return;
             }
-            
+
             file.progress = action.payload.progress;
+
+            if (file.progress === 100) {
+                file.status = 'FULLFILLED';
+                return;
+            }
+
+            file.status = 'PROCESSING';
         },
         removeDownloadFiles: (state, action: PayloadAction<any>) => {
             state.files = [];
         },
+        cancelUploading: (state, action: PayloadAction<any>) => {
+            const id = action.payload.id;
+
+            const file = state.files.filter((file) => {
+                return file.id === id;
+            })[0];
+
+            if (file === undefined) {
+                return;
+            }
+
+            if (file.status == 'CANCELED' || file.status == 'FULLFILLED') {
+                state.files = state.files.filter((file) => file.id != file.id);
+            }
+            
+            controller.abort();
+            file.progress = 0;
+            file.status = 'CANCELED';
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(downloadFile, (state, action) => {
-            return state
-        })
+            return state;
+        });
     },
 })
 
-export const { setFiles, setDownloadProgress, removeDownloadFiles } = downloadFilesSlice.actions
+export const { setFiles, setDownloadProgress, removeDownloadFiles } = downloadFilesSlice.actions;
 
-export const selectDownloadFiles = (state: any) => state.downloadfiles.files
+export const selectDownloadFiles = (state: any) => state.downloadfiles.files;
 
 export const DownloadFilesReduser = downloadFilesSlice.reducer;

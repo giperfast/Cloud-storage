@@ -48,11 +48,6 @@
     padding: 15px;
 }
 
-/*.file:last-child
-{
-    margin-bottom: 15px;
-}*/
-
 .file:hover
 {
     background: #00000008;
@@ -73,3 +68,10 @@
 .file progress::-moz-progress-bar { background: #e91717  !important; }
 .file progress::-webkit-progress-value { background: #e91717  !important; }
 .file progress { color: #e91717  !important; }
+
+
+.cancel
+{
+    cursor: pointer;
+    margin-left: 3px;
+}

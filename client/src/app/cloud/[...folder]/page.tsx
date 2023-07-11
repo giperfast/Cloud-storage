@@ -1,9 +1,9 @@
-import 'server-only'
+import 'server-only';
 import styles from './page.module.css';
 import { FilesContainer } from '@/components/files/files-container/FilesContainer';
 import { File } from '@/components/files/file/File';
 import { Sidebar } from '@/components/sidebar/Sidebar';
-import { DragDropArea } from "@/components/drag-drop/DragDropArea";
+import { DragDropArea } from '@/components/drag-drop/DragDropArea';
 import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
 import { getFiles } from '@/utils/api/files/get';
 import { FilesOverlay } from '@/components/files/files-overlay/FilesOverlay';
@@ -17,8 +17,6 @@ import { Breadcrumbs } from '@/components/breadcrumbs/Breadcrumbs';
 
 async function Page({ params }: { params: { folder: string } }) {
 	const user: IUser|null = await getUserFromCookie();
-	console.log(params['folder']);
-
 	const files: Array<IFile> = await getFiles('folder', params['folder'].join('/'));
 
 	if (user === null) {
@@ -29,7 +27,7 @@ async function Page({ params }: { params: { folder: string } }) {
 
   	return (
 		<>
-			<Sidebar user={user}/>
+			<Sidebar/>
 			<div className="page-content">
 				<div className="page-container" id="files">
 					<p className={styles.title}>
@@ -38,7 +36,18 @@ async function Page({ params }: { params: { folder: string } }) {
 					<FilesContainer>
 					{
 						files.map((file: IFile, index: number) => {
-							return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, expires: file.expires, index: index, path: file.path}} key={file.file_id}/>
+							return <File data={
+								{
+									file_id: file.file_id,
+									name: file.name,
+									extension: file.extension,
+									type: file.type,
+									expires: file.expires,
+									index: index,
+									path: file.path,
+									date: file.date
+								}
+							} key={file.file_id}/>;
 						})
 					}
 					</FilesContainer>
@@ -51,7 +60,7 @@ async function Page({ params }: { params: { folder: string } }) {
 			</ContextMenu>
 			<MouseSelector/>
 		</>
-	)
+	);
 }
 
 export default Page;

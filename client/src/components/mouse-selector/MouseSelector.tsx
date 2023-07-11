@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './MouseSelector.module.css';
 import file_styles from '@/components/files/file/File.module.css';
@@ -15,21 +15,21 @@ const MouseSelector = () => {
 
     const selector = useRef(null);
 
-    const mousedownHandler = useCallback((e) => {
+    const mousedownHandler = useCallback((e: any) => {
         if (e.which !== 1) {
             return false;
         }
 
-        if (!e.target.closest(`#files`)) {
+        if (!e.target.closest('#files')) {
             return false;
         }
 
         document.body.classList.add('no-user-select');
         setAnchor({x: e.pageX, y: e.pageY});
         setActive(true);
-    }, [])
+    }, []);
 
-    const mouseupHandler = useCallback((e) => {
+    const mouseupHandler = useCallback((e: any) => {
         if (e.which !== 1) {
             return false;
         }
@@ -41,9 +41,9 @@ const MouseSelector = () => {
         setAnchor({x: 0, y: 0});
         setCoordinates({x: 0, y: 0, width: 0, height: 0});
         setActive(false);
-    }, [indexes])
+    }, [indexes]);
 
-    const mousemoveHandler = useCallback((e) => {
+    const mousemoveHandler = useCallback((e: any) => {
         if (active !== true) {
             return false;
         }
@@ -52,7 +52,7 @@ const MouseSelector = () => {
             return false;
         }
 
-        if (Math.abs(anchor.x - e.clientX) < 4 && Math.abs(anchor.y - e.clientY) < 4) {
+        if (Math.abs(anchor.x - e.pageX) < 4 && Math.abs(anchor.y - e.pageY) < 4) {
             return false;
         }
 
@@ -63,62 +63,62 @@ const MouseSelector = () => {
             dispatch(removeUnknownFiles());
         }
 
-        let cords = {...coordinates};
+        const cords = {...coordinates};
 
-        cords.x = e.clientX < anchor.x ? e.clientX : anchor.x;
-        cords.y = e.clientY < anchor.y ? e.clientY : anchor.y;
+        cords.x = e.pageX < anchor.x ? e.pageX : anchor.x;
+        cords.y = e.pageY < anchor.y ? e.pageY : anchor.y;
         cords.width = Math.abs(e.clientX - anchor.x);
-        cords.height = Math.abs(e.clientY - anchor.y);
+        cords.height = Math.abs(e.pageY - anchor.y);
 
-        let selector_rect = selector.current.getBoundingClientRect();
-        let temp_indexes: Array<Number> = [];
+        const selector_rect = selector.current.getBoundingClientRect();
+        const set_indexes = new Set();
+        
         Array.from(files).map((file:Element) => {
-            const index = Number(file.firstElementChild?.getAttribute('index'));
-            let file_rect = file.getBoundingClientRect();
-            if (Math.max(file_rect.x, selector_rect.x) <= Math.min(file_rect.x + file_rect.width, selector_rect.x + selector_rect.width) && 
-                Math.max(file_rect.y, selector_rect.y) <= Math.min(file_rect.y + file_rect.height, selector_rect.y + selector_rect.height)) {
-                
-                if (temp_indexes.includes(index)) {
-                    return;
-                }
+            const index = Number(file.getAttribute('index'));
+            const file_rect = file.getBoundingClientRect();
 
-                temp_indexes.push(index);
-                file.firstElementChild?.classList.add(file_styles.selected);
+            const max_x = Math.max(file_rect.x, selector_rect.x);
+            const max_y = Math.max(file_rect.y, selector_rect.y);
+            const min_x = Math.min(file_rect.x + file_rect.width, selector_rect.x + selector_rect.width);
+            const min_y = Math.min(file_rect.y + file_rect.height, selector_rect.y + selector_rect.height);
+
+            if (max_x <= min_x && max_y <= min_y) {
+                set_indexes.add(index);
+                file.classList.add(file_styles.selected);
                 return true;
             }
-            temp_indexes = temp_indexes.filter((array_index) => array_index != index);
-            file.firstElementChild?.classList.remove(file_styles.selected);
+            set_indexes.delete(index);
+            file.classList.remove(file_styles.selected);
         })
 
-        setIndexes(temp_indexes);
+        setIndexes(Array.from(set_indexes));
         setCoordinates(cords);
     }, [active, coordinates])
 
     useEffect(() => {
-        window.addEventListener('mousedown', mousedownHandler)
-        window.addEventListener('mouseup', mouseupHandler)
-        window.addEventListener('mousemove', mousemoveHandler)
+        window.addEventListener('mousedown', mousedownHandler);
+        window.addEventListener('mouseup', mouseupHandler);
+        window.addEventListener('mousemove', mousemoveHandler);
 
         return () => {
-            window.removeEventListener('mousedown', mousedownHandler)
-            window.removeEventListener('mouseup', mouseupHandler)
-            window.removeEventListener('mousemove', mousemoveHandler)
+            window.removeEventListener('mousedown', mousedownHandler);
+            window.removeEventListener('mouseup', mouseupHandler);
+            window.removeEventListener('mousemove', mousemoveHandler);
         };
-    }, [active, coordinates, indexes])
+    }, [active, coordinates, indexes]);
 
     const is_active = active ? styles.active : '';
 
     return (
         <div className={styles.mouse_selector + ' ' + is_active} ref={selector} style={
-        {
-            top: coordinates.y,
-            left: coordinates.x,
-            width: coordinates.width,
-            height: coordinates.height,
-        }
-        }>
-        </div>
-    )
-}
+            {
+                top: coordinates.y,
+                left: coordinates.x,
+                width: coordinates.width,
+                height: coordinates.height,
+            }
+        }></div>
+    );
+};
 
 export { MouseSelector } 

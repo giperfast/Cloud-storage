@@ -1,23 +1,24 @@
-'use server'
+'use server';
 import { IFile } from '@/types/file';
 import axios from 'axios';
-import { parseCookies } from 'nookies'
+import { cookies } from 'next/headers';
+import { result } from '../result/result';
 
 export const restoreFiles = async (files: Array<IFile>) => {
+    const cookieStore = cookies();
+    const session = cookieStore.get('cloud_session')?.value;
+
+    if (!session) {
+        return result(false, 'Session error, reload page');
+    }
+
     if (files.length === 0) {
-        return false;
+        return result(false, 'Files not found');
     }
     
     var data = new URLSearchParams();
     for (const file of files) {
         data.append('files[]', file.file_id);
-    }
-    
-    const cookies = parseCookies()
-    const session = cookies['cloud_session']
-
-    if (!session) {
-        return false;
     }
 
     await axios.post('http://localhost:4000/files/restore', data, {
@@ -26,4 +27,4 @@ export const restoreFiles = async (files: Array<IFile>) => {
             'Authorization': `bearer ${session}`
         },
     });
-}
+};

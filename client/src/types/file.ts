@@ -6,4 +6,5 @@ export interface IFile {
     expires?: number,
     index?: number,
     path: string,
+    date: number,
 }

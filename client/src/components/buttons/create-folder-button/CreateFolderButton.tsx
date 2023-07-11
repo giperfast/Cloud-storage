@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './CreateFolderButton.module.css';
@@ -9,9 +9,10 @@ import { CreateFolderModal } from '@/components/modal/create-folder/CreateFolder
 function CreateFolderButton({children}:{children:React.ReactNode}) {
     const [showModal, setShowModal] = useState(false);
     
-    const clickHandle = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const clickHandle = async (e: any) => {
         setShowModal(true);
-    }
+    };
+
     return (
         <>
             <span onClick={clickHandle} className={styles.delete}>
@@ -20,12 +21,12 @@ function CreateFolderButton({children}:{children:React.ReactNode}) {
 
             {
                 showModal && createPortal(
-                    <Modal onClose={() => setShowModal(false)}><CreateFolderModal/></Modal>,
+                    <Modal close={() => setShowModal(false)}><CreateFolderModal/></Modal>,
                     document.body
                 )
             }
         </>
-    )
+    );
 }
 
 export { CreateFolderButton };

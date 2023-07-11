@@ -1,19 +1,19 @@
-'use client'
-import { useEffect, memo, useCallback, useState, Children } from 'react';
+'use client';
+import { useEffect, useCallback, useState } from 'react';
 import styles from './ContextMenu.module.css';
 
 const ContextMenu = ({children}: {children: React.ReactNode}) => {
     const [active, setActive] = useState(true);
     const [position, setPosition] = useState({x: 0, y: 0});
     
-    const contextMenuHandler = useCallback((e) => {
+    const contextMenuHandler = useCallback((e: any) => {
         if (e.target.closest('#modal')) {
             return setActive(false);
         }
 
         setPosition({x: e.pageX, y: e.pageY});
         setActive(true);
-    }, [])
+    }, []);
 
     const windowClickHandler = useCallback((e: any) => {
         if (e.which !== 1) {
@@ -35,8 +35,8 @@ const ContextMenu = ({children}: {children: React.ReactNode}) => {
         return () => {
             window.removeEventListener('contextmenu', contextMenuHandler);
             window.removeEventListener('mouseup', windowClickHandler);
-        }
-    }, [])
+        };
+    }, []);
     
     const active_class = active === true ? styles.active : '';
 
@@ -44,7 +44,7 @@ const ContextMenu = ({children}: {children: React.ReactNode}) => {
         <div className={styles.menu + ' ' + active_class} style={{left: position.x, top: position.y}} id="context_menu">
             {children}
         </div>
-    )
-}
+    );
+};
 
 export { ContextMenu };

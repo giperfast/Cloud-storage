@@ -27,7 +27,7 @@ async function CloudPage() {
 
   	return (
 		<>
-			<Sidebar user={user}/>
+			<Sidebar/>
 			<div className="page-content">
 				<div className="page-container" id="files">
 					<p className={styles.title}>Files</p>

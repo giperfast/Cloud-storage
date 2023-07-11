@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { userLogout } from './utils/api/user/logout';
 import { getUserFromSession } from './utils/api/user/getFromSession';
-//import { useRouter } from 'next/navigation';
-import { getUserFromCookie } from './utils/api/user/getFromCookie';
-import { revalidateTag } from 'next/cache';
+
 
 const guestRoutes = [
     '/login',
@@ -34,7 +31,6 @@ export async function middleware(request: NextRequest) {
         
         if (request.nextUrl.pathname.startsWith(userRoute)) {
             if (!user) {
-                //revalidateTag('user');
                 return NextResponse.rewrite(new URL('/login', request.url));
             }
         }

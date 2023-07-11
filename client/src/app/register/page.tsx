@@ -1,6 +1,5 @@
-'use client'
+'use client';
 import { useState } from 'react';
-import Image from 'next/image';
 import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { userRegister } from '@/utils/api/user/register';
@@ -13,7 +12,7 @@ const BUTTON_TITLE = 'REGISTER';
 function Register() {
 	const router = useRouter();
 	const [error, setError] = useState('');
-	const [buttonHTML, setButtonHTML] = useState(BUTTON_TITLE);
+	const [buttonHTML, setButtonHTML] = useState<Element|string>(BUTTON_TITLE);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -35,8 +34,8 @@ function Register() {
 			router.push('/cloud');
 		}
 
-		setButtonHTML(BUTTON_TITLE)
-	}
+		setButtonHTML(BUTTON_TITLE);
+	};
 
   	return (
 		<>
@@ -59,7 +58,7 @@ function Register() {
 				</div>
 			</div>
 		</>
-  	)
+  	);
 }
 
 export default Register;

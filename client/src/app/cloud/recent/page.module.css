@@ -1,0 +1,54 @@
+
+.content
+{
+    width: 100%;
+}
+
+.container
+{
+    margin: 25px 0px;
+    padding: 25px;
+    min-height: 100%;
+    background: white;
+    box-shadow: 0 4px 56px rgb(0 0 0 / 12%);
+    border-radius: 8px; 
+}
+
+.title
+{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid #dddfe0;
+    font-weight: 600;
+    font-size: 28px;
+    color: #000000cc;
+}
+
+.rightSection > *
+{
+    border: 1px solid #0000001c;
+    box-shadow: 0 0px 5px rgb(0 0 0 / 12%);
+}
+
+.wrapper
+{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: sticky;
+    top: 80px;
+
+}
+
+.filesDate
+{
+    width: 100%;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    margin: 5px 0;
+    padding: 0;
+    color: #000000cc;
+}

@@ -32,13 +32,27 @@ export class RecycleBinService {
 	}
 
 	async getFiles(userId): Promise<object> {
-		const files = await this.databaseService.deletedFile.findMany({
+		const folders = await this.databaseService.deletedFile.findMany({
 			where: {
-				userId: userId
+				userId: userId,
+				type: {
+					startsWith: 'folder'
+				},
 			}
 		})
 
-		return files;
+		const files = await this.databaseService.deletedFile.findMany({
+			where: {
+				userId: userId,
+				type: {
+					not: {
+						contains: 'folder',
+					}
+				},
+			}
+		})
+		
+		return [...folders, ...files];
 	}
 
 	async getFilesTotalSize(userId): Promise<number> {

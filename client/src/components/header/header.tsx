@@ -1,5 +1,5 @@
-//import 'server-only'
-'use server'
+'use server';
+import 'server-only';
 import Link from 'next/link';
 import styles from './header.module.css';
 import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
@@ -31,7 +31,7 @@ async function Header() {
                 </div>
             </div>
         </header>
-    )
+    );
 }
 
-export {Header};
+export { Header };

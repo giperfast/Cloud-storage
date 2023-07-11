@@ -9,20 +9,25 @@ import { gzip, unzip, unzipSync } from 'zlib';
 import { Buffer } from "buffer";
 import { Writable } from 'stream'
 import { RecycleBinService } from './recyclebin.service';
+import { ValidatorsService } from './validators.service';
+
 const archiver = require('archiver');
 var Stream = require('stream');
 
 @Controller('files')
 export class FilesController {
-	constructor(private readonly filesService: FilesService, private readonly recyclebinService: RecycleBinService, private readonly authService: AuthService) {}
+	constructor(
+		private readonly filesService: FilesService,
+		private readonly recyclebinService: RecycleBinService,
+		private readonly authService: AuthService,
+		private readonly validatorsService: ValidatorsService
+	) {}
 
 	@Post('/upload')
 	@UseInterceptors(FilesInterceptor('file'))
   	async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>, @Req() request: Request, @Query() query: string): Promise<any> {
-		console.log('user');
 		const user = await this.authService.fromBaerer(request);
-		console.log(user);
-		
+
 		let result = [];
 		for (const file of files) {
 			const hash = await this.filesService.createFileFromClient(file, user.id, query['path'] || null);
@@ -47,14 +52,16 @@ export class FilesController {
 	@Get('/')
 	async getFiles(@Req() request: Request, @Query() query: string): Promise<any> {
 		const user = await this.authService.fromBaerer(request);
+		
 		let files = {};
-		console.log('get', query);
+
 		switch (query['type']) {
 			case 'recent':
+				files = await this.filesService.getRecent(user.id);
 				break;
 
 			case 'photo':
-				files = await this.filesService.getFiles(user.id, 'image');
+				files = await this.filesService.getImages(user.id);
 				break;
 
 			case 'recycle':
@@ -66,8 +73,6 @@ export class FilesController {
 				break;
 		}
 
-		//console.log(files);
-		
 		return files;
 	}
 
@@ -149,8 +154,9 @@ export class FilesController {
 
 	@Post('/restore')
 	async restoreFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
-		await this.authService.fromBaerer(request)
-		response.status(200).send({ success: true });
+		await this.authService.fromBaerer(request);
+		console.log(body);
+		//response.status(200).send({ success: true });
 
 		for (const file_hash of body['files']) {
 			const file = await this.recyclebinService.getFileFromId(file_hash)
@@ -163,12 +169,21 @@ export class FilesController {
 			await this.recyclebinService.delete(file);
 		}
 
+		
+		
+
 		response.status(200).send({ success: true });
 	}
 
 	@Post('/create-folder')
 	async createFilder(@Req() request: Request, @Res() response: Response, @Query() query: Array<string>): Promise<any> {
 		const user = await this.authService.fromBaerer(request)
+		const validator = await this.validatorsService.folderName(query['name']);
+
+		if (!validator.check()) {
+			console.log(validator.getError());
+			return response.status(500).send({ success: false, error: validator.getError() });
+		}
 
 		console.log(query);
 

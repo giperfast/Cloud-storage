@@ -1,3 +1,12 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-console": "warn",
+    "quotes": ["warn", "single"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "prefer-const": "error",
+    //"indent": ["warn", { "allowIndentationTabs": true }],
+    "max-len": ["warn", {"code": 120}],
+    "semi": ["warn", "always"]
+  }
 }

@@ -1,5 +1,5 @@
-'use client'
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
+'use client';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
 import { UserReduser } from './slices/user';
 import { FilesReduser } from './slices/files';
@@ -15,6 +15,6 @@ export const store = configureStore({
 	},
 });
 
-export type AppState = ReturnType<typeof store.getState>
+export type AppState = ReturnType<typeof store.getState>;
 
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;

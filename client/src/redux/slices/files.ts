@@ -1,5 +1,5 @@
-'use client'
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+'use client';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const filesSlice = createSlice({
     name: 'files',
@@ -26,7 +26,6 @@ export const filesSlice = createSlice({
         },
 
         setUnknownFiles: (state, action: PayloadAction<any>) => {
-            //console.log(state, action.payload);
             state.unknown_files = action.payload;
         },
         removeUnknownFile: (state, action: PayloadAction<any>) => {
@@ -38,7 +37,15 @@ export const filesSlice = createSlice({
     },
 })
 
-export const { setFiles, removeFiles, addFile, removeFile, setUnknownFiles, removeUnknownFile, removeUnknownFiles } = filesSlice.actions;
+export const { 
+    setFiles,
+    removeFiles,
+    addFile,
+    removeFile,
+    setUnknownFiles,
+    removeUnknownFile,
+    removeUnknownFiles 
+} = filesSlice.actions;
 
 export const selectFiles = (state: any) => state.files.files;
 

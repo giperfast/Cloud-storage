@@ -1,12 +1,12 @@
-'use server'
+'use server';
 import React from 'react';
 import styles from './Sidebar.module.css';
 import { convertBytes } from '@/utils/common/bytes';
-import { Button } from "@/components/buttons/button/Button";
-import { UploadButton } from "@/components/buttons/upload-button/UploadButton";
+import { Button } from '@/components/buttons/button/Button';
+import { UploadButton } from '@/components/buttons/upload-button/UploadButton';
 import { IUser } from '@/types/user';
-//import { useRouter } from 'next/router'
 import { headers } from 'next/headers';
+import { getUserFromCookie } from '@/utils/api/user/getFromCookie';
 
 const buttons = [
     { 
@@ -17,7 +17,7 @@ const buttons = [
     { 
         title: 'Recent',
         icon: 'file-alt',
-        href: '',
+        href: '/cloud/recent',
     },
     { 
         title: 'Photo',
@@ -29,12 +29,17 @@ const buttons = [
         icon: 'trash-alt',
         href: '/cloud/recycle',
     },
-]
+];
 
-function Sidebar({user}: {user: IUser}) {
+async function Sidebar() {
+    const user: IUser|null = await getUserFromCookie();
     const headersList = headers();
     const path = headersList.get('x-url');
     
+    if (user === null) {
+        return <></>;
+    }
+
     const can_upload = user.storage.used <= user.storage.total;
     const usage_percent = (100 * user.storage.used) / user.storage.total;
 
@@ -53,7 +58,7 @@ function Sidebar({user}: {user: IUser}) {
                         <Button href={button.href} icon={button.icon} theme={path === button.href ? 'gray' : 'transparent'} key={index}>
                             {button.title}
                         </Button>
-                        )
+                        );
                     })
                 }
 

@@ -1,10 +1,10 @@
-'use server'
+'use server';
 
 export async function convertBytes(bytes: number, type: string) {
     let result = 0;
     switch (type) {
         case 'GB':
-            result = bytes / 1024 / 1024 / 1024
+            result = bytes / 1024 / 1024 / 1024;
             break;
     
         default:
@@ -12,11 +12,11 @@ export async function convertBytes(bytes: number, type: string) {
     }
 
     if (result <= 0) {
-        return 0
+        return 0;
     }
 
     if (result % 1 === 0) {
-        return result
+        return result;
     }
 
     return result.toFixed(2);

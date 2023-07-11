@@ -1,7 +1,7 @@
-'use client'
-import { useEffect } from 'react'
+'use client';
+import { useEffect } from 'react';
 import styles from './page.module.css';
-import { parseCookies } from 'nookies'
+import { parseCookies } from 'nookies';
 import { userLogout } from '@/utils/api/user/logout';
 import { Preloader } from '@/components/UI/preloader/Preloader';
 
@@ -12,18 +12,15 @@ function Logout() {
 	useEffect(() => {
 		async function go_logout() {
 			if (session === undefined) {
-				window.location.href = "/";
+				window.location.href = '/';
 				return;
 			}
 
 			await userLogout(session);
-			window.location.href = "/";
-
-			/*router.refresh();*/
-			//router.push('/');
+			window.location.href = '/';
 		}
 		go_logout();
-	})
+	});
 	
   	return (
 		<div className={styles.content}>
