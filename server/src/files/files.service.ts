@@ -69,7 +69,7 @@ export class FilesService {
 		return folder.file_id;
 	}
 
-	async getFiles(userId, type='', path=null): Promise<object> {
+	async getFiles(userId, type='', path=null): Promise<Array<Object>> {
 		const folders = await this.databaseService.file.findMany({
 			where: {
 				userId: userId,
@@ -92,6 +92,10 @@ export class FilesService {
 				path: path
 			}
 		})
+		if (path != null) {
+			console.log(path, files);
+		}
+		
 		
 		return [...folders, ...files];
 	}

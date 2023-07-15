@@ -135,7 +135,7 @@ export class FilesController {
 	@Post('/delete')
 	async deleteFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
 		await this.authService.fromBaerer(request)
-		response.status(200).send({ success: true });
+		//response.status(200).send({ success: true });
 
 		for (const file_hash of body['files']) {
 
@@ -152,6 +152,28 @@ export class FilesController {
 		response.status(200).send({ success: true });
 	}
 
+	@Post('/force-delete')
+	async forceDeleteFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
+		await this.authService.fromBaerer(request)
+		//response.status(200).send({ success: true });
+
+		for (const file_hash of body['files']) {
+
+			await this.recyclebinService.forceDelete(file_hash);
+
+			/*const file = await this.filesService.getFileFromId(file_hash)
+
+			if (file === null) {
+				continue;
+			}
+
+			await this.recyclebinService.createFile(file);
+			await this.filesService.delete(file);*/
+		}
+
+		//response.status(200).send({ success: true });
+	}
+
 	@Post('/restore')
 	async restoreFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
 		await this.authService.fromBaerer(request);
@@ -166,11 +188,8 @@ export class FilesController {
 			}
 
 			await this.filesService.createFile(file);
-			await this.recyclebinService.delete(file);
+			await this.recyclebinService.delete(file['file_id']);
 		}
-
-		
-		
 
 		response.status(200).send({ success: true });
 	}
@@ -180,12 +199,12 @@ export class FilesController {
 		const user = await this.authService.fromBaerer(request)
 		const validator = await this.validatorsService.folderName(query['name']);
 
+		console.log(query);
+
 		if (!validator.check()) {
 			console.log(validator.getError());
 			return response.status(500).send({ success: false, error: validator.getError() });
 		}
-
-		console.log(query);
 
 		const hash = await this.filesService.createFolder(query['name'], query['path'] || null, user.id, null);
 		return response.status(200).send({ success: true });

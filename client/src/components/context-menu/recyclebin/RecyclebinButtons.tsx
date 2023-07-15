@@ -2,7 +2,7 @@
 import { useEffect, memo, useCallback, useState } from 'react';
 import styles from '../ContextMenu.module.css';
 import { UploadButton } from '@/components/buttons/upload-button/UploadButton';
-import { DeleteButton } from '@/components/buttons/delete-button/DeleteButton';
+import { ForceDeleteButton } from '@/components/buttons/force-delete-button/ForceDeleteButton';
 import { RestoreButton } from '@/components/buttons/restore-button/RestoreButton';
 
 function FileButtons() {
@@ -11,9 +11,9 @@ function FileButtons() {
             <RestoreButton>
                 <button className={styles.button}>Restore</button>
             </RestoreButton>
-            <DeleteButton>
+            <ForceDeleteButton>
                 <button className={styles.button}>Delete</button>
-            </DeleteButton>
+            </ForceDeleteButton>
         </>
     );
 }

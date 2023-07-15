@@ -142,7 +142,7 @@ export const downloadFilesSlice = createSlice({
             }
 
             if (file.status == 'CANCELED' || file.status == 'FULLFILLED') {
-                state.files = state.files.filter((file) => file.id != file.id);
+                state.files = state.files.filter((filter_file) => filter_file.id != file.id);
             }
             
             controller.abort();
@@ -155,7 +155,7 @@ export const downloadFilesSlice = createSlice({
             return state;
         });
     },
-})
+});
 
 export const { setFiles, setDownloadProgress, removeDownloadFiles } = downloadFilesSlice.actions;
 

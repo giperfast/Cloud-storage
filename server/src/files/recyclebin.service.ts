@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
+import { unlink, stat } from 'node:fs';
+import { FileUtilsService } from './utils.service';
+import { FilesService } from './files.service';
 
 @Injectable()
 export class RecycleBinService {
-  	constructor(private readonly databaseService: DatabaseService) {}
+	constructor(
+		private readonly databaseService: DatabaseService,
+		private readonly filesService: FilesService,
+		private readonly fileUtilsService: FileUtilsService
+	) {}
 
 	async createFile(file_data): Promise<string> {
 		const file = await this.databaseService.deletedFile.create({
@@ -21,12 +28,53 @@ export class RecycleBinService {
 		return file.file_id;
 	}
 
-	async delete(file_data): Promise<boolean> {
+	async delete(file_id): Promise<boolean> {
 		await this.databaseService.deletedFile.delete({
 			where: {
-				file_id: file_data.file_id
+				file_id: file_id
 			}
 		})
+
+		return true;
+	}
+
+	async forceDelete(file_id): Promise<boolean> {
+		const target = await this.getFileFromId(file_id);
+		const name = target['type'] == 'folder' ? target['name'] : target['file_id'];
+		const server_path = this.fileUtilsService.getServerPath(target['userId'], name, target['path']);
+		//const childs: Array<Object> = await this.filesService.getFiles(target['userId'], '', path);
+		//console.log(target, server_path, name, target['path']);
+		
+		await this.delete(target['file_id']);
+		console.log(target['path']);
+		
+		console.log('path', await this.databaseService.file.findMany({
+			where: {
+				path: {
+					startsWith: target['path'] || encodeURIComponent(target['name'])
+				},
+			}
+		}));
+			
+
+		await this.databaseService.file.deleteMany({
+			where: {
+				path: {
+					startsWith: target['path'] || encodeURIComponent(target['name'])
+				},
+			}
+		});
+		
+
+		unlink(server_path, function(err) {
+			if(err && err.code == 'ENOENT') {
+				console.info("File doesn't exist, won't remove it.", target['path']);
+			} else if (err) {
+				console.error("Error occurred while trying to remove file", err);
+			} else {
+				console.info(`removed`);
+			}
+		});
 
 		return true;
 	}
@@ -71,6 +119,18 @@ export class RecycleBinService {
 		const file = await this.databaseService.deletedFile.findUnique({
 			where: {
 				file_id: file_id
+			}
+		})
+		
+		return file;
+	}
+
+	async getChildsFromId(path): Promise<object> {
+		const file = await this.databaseService.deletedFile.findMany({
+			where: {
+				path: {
+					startsWith: path
+				},
 			}
 		})
 		

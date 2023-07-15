@@ -38,4 +38,4 @@ export const createFolder = async (name:string, path:string = ''): Promise<IResu
 	}
 
     return result(true);
-}
+};

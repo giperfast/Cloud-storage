@@ -10,8 +10,6 @@ export class ValidatorsService {
         let error;
     
         const check = () => {
-            console.log('12312312312', value);
-            
             if (value.length === 0) {
                 error = 'value_empty';
                 return false;

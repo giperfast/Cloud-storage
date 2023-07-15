@@ -10,13 +10,13 @@ interface IUploadFileProps {
     path:string
 }
 
-export const uploadFile = createAsyncThunk('uploadFiles/upload', async function({file, path=''}:IUploadFileProps, {dispatch, getState}) {
+export const uploadFile = createAsyncThunk('uploadFiles/upload', async function({file, path=null}:IUploadFileProps, {dispatch, getState}) {
     if (file === null) {
         return false;
     }
 
-    const cookies = parseCookies()
-    const session = cookies['cloud_session']
+    const cookies = parseCookies();
+    const session = cookies['cloud_session'];
     
     if (!session) {
         return false;
@@ -27,13 +27,18 @@ export const uploadFile = createAsyncThunk('uploadFiles/upload', async function(
     const id = stateFiles.length !== 0 ? stateFiles.at(-1).id + 1 : 0 ;
     dispatch(setFiles([...stateFiles, {id: id, name: file.name, progress: 0, status: 'PENDING'}]));
 
+    const params = new URLSearchParams();
+    if (path !== null) {
+        params.append('path', path);
+    }
+
     const data = new FormData();
     data.append('file', file, file.name);
 
-    await axios.post(`http://46.146.194.137:4000/files/upload?path=${path}`, data, {
+    await axios.post(`http://46.146.194.137:4000/files/upload?${params}`, data, {
         headers: {
             'Accept': 'application/json',
-            'Authorization': `bearer ${session}`
+            'Authorization': `bearer ${session}`,
         },
         onUploadProgress: upload => {
             const progress = Math.round((100 * upload.loaded) / upload.total);                        
@@ -87,7 +92,7 @@ export const uploadFilesSlice = createSlice({
             }
 
             if (file.status == 'CANCELED' || file.status == 'FULLFILLED') {
-                state.files = state.files.filter((file) => file.id != file.id);
+                state.files = state.files.filter((filter_file) => filter_file.id != file.id);
             }
             
             controller.abort();
@@ -98,9 +103,9 @@ export const uploadFilesSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(uploadFile, (state, action) => {
             return state;
-        })
+        });
     },
-})
+});
 
 export const { 
     setFiles,

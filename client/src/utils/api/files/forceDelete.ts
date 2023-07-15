@@ -4,7 +4,7 @@ import axios from 'axios';
 import { cookies } from 'next/headers';
 import { result } from '../result/result';
 
-export const deleteFiles = async (files: Array<IFile>) => {
+export const forceDeleteFiles = async (files: Array<IFile>) => {
     const cookieStore = cookies();
     const session = cookieStore.get('cloud_session')?.value;
 
@@ -21,10 +21,12 @@ export const deleteFiles = async (files: Array<IFile>) => {
         data.append('files[]', file.file_id);
     }
 
-    await axios.post('http://localhost:4000/files/delete', data, {
+    await axios.post('http://localhost:4000/files/force-delete', data, {
         headers: {
             'Accept': 'application/json',
             'Authorization': `bearer ${session}`
         },
     });
+
+    return result(true);
 };
