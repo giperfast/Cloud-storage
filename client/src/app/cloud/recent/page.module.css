@@ -51,4 +51,7 @@
     margin: 5px 0;
     padding: 0;
     color: #000000cc;
+    background-color: #0000000a;
+    padding: 5px;
+    border-radius: 5px;
 }

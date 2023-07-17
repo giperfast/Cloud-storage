@@ -56,7 +56,7 @@ async function RecyclePage() {
 				</div>
 			</div>
 			<FilesOverlay/>
-			<DragDropArea isActive={can_upload}/>
+			<DragDropArea /*isActive={can_upload}*//>
 			<ContextMenu>
 				<RecyclebinButtons/>
 			</ContextMenu>

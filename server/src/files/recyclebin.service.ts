@@ -20,6 +20,7 @@ export class RecycleBinService {
 				extension: file_data.extension,
 				size: file_data.size,
 				type: file_data.type,
+				path: file_data.path,
 				expires: Math.floor(Date.now()/1000) + 86400,
 				userId: file_data.userId
 			}
@@ -46,16 +47,6 @@ export class RecycleBinService {
 		//console.log(target, server_path, name, target['path']);
 		
 		await this.delete(target['file_id']);
-		console.log(target['path']);
-		
-		console.log('path', await this.databaseService.file.findMany({
-			where: {
-				path: {
-					startsWith: target['path'] || encodeURIComponent(target['name'])
-				},
-			}
-		}));
-			
 
 		await this.databaseService.file.deleteMany({
 			where: {
@@ -64,7 +55,6 @@ export class RecycleBinService {
 				},
 			}
 		});
-		
 
 		unlink(server_path, function(err) {
 			if(err && err.code == 'ENOENT') {

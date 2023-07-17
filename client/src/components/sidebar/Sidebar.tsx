@@ -1,5 +1,5 @@
 'use server';
-import React from 'react';
+import 'server-only';
 import styles from './Sidebar.module.css';
 import { convertBytes } from '@/utils/common/bytes';
 import { Button } from '@/components/buttons/button/Button';

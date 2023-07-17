@@ -6,7 +6,7 @@
     "jsx-quotes": ["error", "prefer-double"],
     "prefer-const": "error",
     //"indent": ["warn", { "allowIndentationTabs": true }],
-    "max-len": ["warn", {"code": 120}],
+    "max-len": ["warn", {"code": 150}],
     "semi": ["warn", "always"]
   }
 }

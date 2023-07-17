@@ -54,7 +54,7 @@ async function Page({ params }: { params: { folder: string } }) {
 				</div>
 			</div>
 			<FilesOverlay/>
-			<DragDropArea isActive={can_upload}/>
+			<DragDropArea /*isActive={can_upload}*//>
 			<ContextMenu>
 				<GlobalButtons/>
 			</ContextMenu>

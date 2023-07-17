@@ -1,7 +1,7 @@
 'use server';
 import 'server-only';
 import Link from 'next/link';
-import styles from './footer.module.css';
+import styles from './Footer.module.css';
 import { Icon } from '@/components/UI/icon/Icon';
 
 function Footer() {
@@ -22,7 +22,7 @@ function Footer() {
                 </div>
             </div>
         </footer>
-    )
+    );
 }
 
 export { Footer };

@@ -34,14 +34,23 @@ async function CloudPage() {
 					<FilesContainer>
 					{
 						files.map((file: IFile, index: number) => {
-							return <File data={{file_id: file.file_id, name: file.name, extension: file.extension, type: file.type, index: index, path: file.path}} key={file.file_id}/>
+							return <File data={
+								{
+									file_id: file.file_id,
+									name: file.name,
+									extension: file.extension,
+									type: file.type,
+									index: index,
+									path: file.path
+								}
+							} key={file.file_id}/>;
 						})
 					}
 					</FilesContainer>
 				</div>
 			</div>
 			<FilesOverlay/>
-			<DragDropArea isActive={can_upload}/>
+			<DragDropArea /*isActive={can_upload}*//>
 			<ContextMenu>
 				<GlobalButtons/>
 			</ContextMenu>

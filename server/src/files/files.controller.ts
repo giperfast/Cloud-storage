@@ -29,6 +29,7 @@ export class FilesController {
 		const user = await this.authService.fromBaerer(request);
 
 		let result = [];
+		
 		for (const file of files) {
 			const hash = await this.filesService.createFileFromClient(file, user.id, query['path'] || null);
 			const path = this.filesService.getUrl(user.id, hash, query['path'] || null);
@@ -134,16 +135,30 @@ export class FilesController {
 
 	@Post('/delete')
 	async deleteFiles(@Req() request: Request, @Res() response: Response, @Body() body: Array<string>): Promise<any> {
-		await this.authService.fromBaerer(request)
+		await this.authService.fromBaerer(request);
 		//response.status(200).send({ success: true });
 
 		for (const file_hash of body['files']) {
 
-			const file = await this.filesService.getFileFromId(file_hash)
+			const file = await this.filesService.getFileFromId(file_hash);
 
 			if (file === null) {
 				continue;
 			}
+
+			/*const childs: Array<Object> = await this.filesService.getChilds(file['userId'], file['path'] || encodeURIComponent(file['name']));
+			console.log(childs);
+			
+			for (let index = 0; index < childs.length; index++) {
+				const child = childs[index];
+
+				if (child === undefined) {
+					break;
+				}
+
+				await this.recyclebinService.createFile(child);
+				await this.filesService.delete(child);
+			}*/
 
 			await this.recyclebinService.createFile(file);
 			await this.filesService.delete(file);

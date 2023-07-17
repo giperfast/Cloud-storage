@@ -6,7 +6,7 @@ import { uploadFile } from '@/redux/slices/uploadFiles';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useCurrentPath } from '@/app/hooks/useCurrentPath';
 
-const DragDropArea = ({isActive}:{isActive:boolean}) => {
+const DragDropArea = (/*{isActive}:{isActive:boolean}*/) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const path = useCurrentPath();
@@ -19,7 +19,7 @@ const DragDropArea = ({isActive}:{isActive:boolean}) => {
             e.preventDefault();
             setDrag(true);
             counter++;
-        }
+        };
 
         const dragLeaveHandler = (e: any) => {
             e.preventDefault();
@@ -28,7 +28,7 @@ const DragDropArea = ({isActive}:{isActive:boolean}) => {
                 return false;
             }
             setDrag(false);
-        }
+        };
 
         const dragOverHandler = (e: any) => {
             e.preventDefault();
@@ -39,9 +39,9 @@ const DragDropArea = ({isActive}:{isActive:boolean}) => {
             setDrag(false);
             counter = 0;
 
-            if (isActive === false) {
+            /*if (isActive === false) {
                 return false;
-            }
+            }*/
 
             const files = e.dataTransfer.files;
 
@@ -60,17 +60,17 @@ const DragDropArea = ({isActive}:{isActive:boolean}) => {
                     router.refresh();
                 });
             }
-        }
+        };
 
-        window.addEventListener('dragenter', dragStartHandler)
-        window.addEventListener('dragleave', dragLeaveHandler)
-        window.addEventListener('dragover', dragOverHandler)
-        window.addEventListener('drop', dropHandler)
+        window.addEventListener('dragenter', dragStartHandler);
+        window.addEventListener('dragleave', dragLeaveHandler);
+        window.addEventListener('dragover', dragOverHandler);
+        window.addEventListener('drop', dropHandler);
         return () => {
-            window.removeEventListener('dragenter', dragStartHandler)
-            window.removeEventListener('dragleave', dragLeaveHandler)
-            window.removeEventListener('dragover', dragOverHandler)
-            window.removeEventListener('drop', dropHandler)
+            window.removeEventListener('dragenter', dragStartHandler);
+            window.removeEventListener('dragleave', dragLeaveHandler);
+            window.removeEventListener('dragover', dragOverHandler);
+            window.removeEventListener('drop', dropHandler);
         };
     }, [path]);
 
@@ -78,8 +78,8 @@ const DragDropArea = ({isActive}:{isActive:boolean}) => {
         return <></>;
     }
 
-    const message = isActive === true ? 'Drop file' : 'Storage is full. Please free up space to upload files';
-
+    //const message = isActive === true ? 'Drop file' : 'Storage is full. Please free up space to upload files';
+    const message = 'Drop file';
     return (
         <div className={styles.container}>
             <div className={styles.content}>{message}</div>

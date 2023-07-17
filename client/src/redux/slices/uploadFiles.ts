@@ -35,7 +35,7 @@ export const uploadFile = createAsyncThunk('uploadFiles/upload', async function(
     const data = new FormData();
     data.append('file', file, file.name);
 
-    await axios.post(`http://46.146.194.137:4000/files/upload?${params}`, data, {
+    await axios.post(`http://localhost:4000/files/upload?${params}`, data, {
         headers: {
             'Accept': 'application/json',
             'Authorization': `bearer ${session}`,

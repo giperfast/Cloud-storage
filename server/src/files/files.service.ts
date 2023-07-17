@@ -100,6 +100,36 @@ export class FilesService {
 		return [...folders, ...files];
 	}
 
+	async getChilds(userId, path=null): Promise<Array<Object>> {
+		const folders = await this.databaseService.file.findMany({
+			where: {
+				userId: userId,
+				type: {
+					startsWith: 'folder'
+				},
+				path: {
+					startsWith: path
+				}
+			}
+		})
+
+		const files = await this.databaseService.file.findMany({
+			where: {
+				userId: userId,
+				type: {
+					not: {
+						contains: 'folder',
+					}
+				},
+				path: {
+					startsWith: path
+				}
+			}
+		})
+		
+		return [...folders, ...files];
+	}
+
 	async getRecent(userId): Promise<object> {
 		const files = await this.databaseService.file.findMany({
 			where: {

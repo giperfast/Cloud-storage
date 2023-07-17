@@ -23,18 +23,18 @@ function timeConverter(UNIX_timestamp){
 	var hour = a.getHours();
 	var min = a.getMinutes();
 	var sec = a.getSeconds();
-	var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+	var time = date + ' ' + month + ' ' + year ;
 	return time;
 }
 
 
-function groupFiles(files) {
+function groupFiles(files: Array<IFile>) {
 	let last_date = 0;
 	const result = {};
 
 	for (var i = 0; i < files.length; i++) {
 		const file = files[i];
-		if (file.date - last_date >= 1000) {
+		if (file.date - last_date >= 86000) {
 			last_date = file.date;
 
 			if (!result.hasOwnProperty(last_date)) {
@@ -104,7 +104,7 @@ async function PhotoPage() {
 				</div>
 			</div>
 			<FilesOverlay/>
-			<DragDropArea isActive={can_upload}/>
+			<DragDropArea /*isActive={can_upload}*//>
 			<ContextMenu>
 				<RecyclebinButtons/>
 			</ContextMenu>
